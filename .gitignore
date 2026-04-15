@@ -19,6 +19,10 @@ frontend/*.mobileprovision
 frontend/*.orig.*
 frontend/web-build/
 
+# Firebase secrets
+frontend/google-services.json
+frontend/*firebase-adminsdk*.json
+
 # ───── OS ─────
 .DS_Store
 Thumbs.db
