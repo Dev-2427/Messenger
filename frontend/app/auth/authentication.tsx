@@ -10,14 +10,14 @@ import useAuthStore from '../../stores/authStore';
 import * as SecureStore from "expo-secure-store";
 import { safeReplace } from '../../helpers/safeNavigation';
 import { Image } from 'expo-image';
-// import { useGoogleLogin } from '../../helpers/googleAuth/useGoogleLogin';
+import { useGoogleLogin } from '../../helpers/googleAuth/useGoogleLogin';
 
 type mode = "signin" | "signup"
 
 
 export default function Auth() {
 
-    // const { signInWithGoogle } = useGoogleLogin()
+    const { signInWithGoogle } = useGoogleLogin()
     const [screen, setScreen] = useState<mode>('signin')
 
     const signUp = useAuthStore((state) => state.signUp)
@@ -241,7 +241,7 @@ export default function Auth() {
                 </View>
 
                 <Pressable
-                    // onPress={signInWithGoogle}
+                    onPress={signInWithGoogle}
                     // disabled={disabled}
                     className="flex-row items-center justify-center h-[56px] border-2 border-[#e1e1e1] rounded-[12px] bg-white active:bg-gray-50"
                 >

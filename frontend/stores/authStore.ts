@@ -8,7 +8,7 @@ import { router } from "expo-router";
 import { registerPushNotificationAsync } from "../helpers/notificationService";
 import NetInfo from '@react-native-community/netinfo'
 import type { ChatAndMessagestore } from "./chatAndMessageStore";
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 interface AuthUser {
     id: string,
@@ -299,11 +299,11 @@ const useAuthStore = create<AuthState>((set, get) => ({
                 await SecureStore.deleteItemAsync('accessToken')
                 await SecureStore.deleteItemAsync('refreshToken')
 
-                // try {
-                //     await GoogleSignin.signOut()
-                // } catch (error) {
-                //     console.error('Google log out failed', error)
-                // }
+                try {
+                    await GoogleSignin.signOut()
+                } catch (error) {
+                    console.error('Google log out failed', error)
+                }
 
                 router.replace('/auth/authentication')
                 set({ user: { email: '', name: '', id: '', avatar: '', avatarId: '', expoToken: '' } as AuthUser, isAuthenticated: false })
@@ -417,12 +417,12 @@ const useAuthStore = create<AuthState>((set, get) => ({
 
             if (res.data.success) {
 
-                // try {
-                //     await GoogleSignin.revokeAccess()
-                //     await GoogleSignin.signOut()
-                // } catch (error) {
-                //     console.error('Google logout failed during user deletion', error)
-                // }
+                try {
+                    await GoogleSignin.revokeAccess()
+                    await GoogleSignin.signOut()
+                } catch (error) {
+                    console.error('Google logout failed during user deletion', error)
+                }
 
                 set({
                     user: { email: '', id: '', name: '', avatar: '', avatarId: '', expoToken: '' } as AuthUser,
