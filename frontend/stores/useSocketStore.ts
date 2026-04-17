@@ -1,12 +1,11 @@
 import { create } from "zustand";
 import { Socket, io } from "socket.io-client";
 import useChatAndMessageStore from "./chatAndMessageStore";
-import Toast from "react-native-toast-message";
 import * as SecureStore from 'expo-secure-store'
 import api from "../helpers/axiosInstance/axiosInstance";
 import useAuthStore from "./authStore";
 
-export const BASE_URL = 'http://10.227.94.68:3000';
+export const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 interface SocketStore {
     socket: Socket | null,
@@ -61,9 +60,10 @@ const useSocketStore = create<SocketStore>((set, get) => ({
                     }
 
                     await SecureStore.setItemAsync('accessToken', res.data.accessToken)
-                    await SecureStore.setItemAsync('refreshToken', res.data.refreshToken)
+                    await SecureStore.setItemAsync('refreshToken', res.data.refreshToken);
 
-                    socket.auth.token = res.data.accessToken
+                    // socket.auth.token = res.data.accessToken
+                    (socket.auth as { token: string }).token = res.data.accessToken
                     socket.connect()
                 } catch (error) {
                     console.error('❌ Refresh token failed from socket')

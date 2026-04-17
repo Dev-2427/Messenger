@@ -152,13 +152,15 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 import * as SecureStore from 'expo-secure-store';
 import { router } from 'expo-router';
 
+const URL = process.env.EXPO_PUBLIC_API_URL
+
 // Extend Axios types to include _retry flag
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     _retry?: boolean;
 }
 
 const api = axios.create({
-    baseURL: 'http://10.227.94.68:3000',
+    baseURL: URL,
     headers: {
         "x-platform": "mobile"
     },
@@ -237,7 +239,7 @@ api.interceptors.response.use(
 
                 // Call refresh endpoint
                 const refreshResponse = await axios.post(
-                    'http://10.227.94.68:3000/api/auth/refresh',
+                    `${URL}/api/auth/refresh`,
                     {},
                     {
                         headers: {
@@ -322,7 +324,7 @@ api.interceptors.response.use(
 
                 // Call refresh endpoint
                 const response = await axios.post(
-                    'http://10.227.94.68:3000/api/auth/refresh',
+                    `${URL}/api/auth/refresh`,
                     {},
                     {
                         headers: {
