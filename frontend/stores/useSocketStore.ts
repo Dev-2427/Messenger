@@ -43,31 +43,8 @@ const useSocketStore = create<SocketStore>((set, get) => ({
             console.log('❌ CONNECTION ERROR:', err.message);
 
             if (err.message === 'Unauthorized') {
-                try {
-                    console.log("🔄 Refreshing token...")
-                    const refreshToken = await SecureStore.getItemAsync('refreshToken')
-                    console.log('refreshToken', refreshToken)
-                    const res = await api.post('/api/auth/refresh', {}, {
-                        headers: {
-                            Authorization: `Bearer ${refreshToken}`,
-                            'x-platform': 'mobile'
-                        }
-                    })
-
-                    if (!res.data.success) {
-                        useAuthStore.getState().signOut()
-                        throw new Error(res.data.message)
-                    }
-
-                    await SecureStore.setItemAsync('accessToken', res.data.accessToken)
-                    await SecureStore.setItemAsync('refreshToken', res.data.refreshToken);
-
-                    // socket.auth.token = res.data.accessToken
-                    (socket.auth as { token: string }).token = res.data.accessToken
-                    socket.connect()
-                } catch (error) {
-                    console.error('❌ Refresh token failed from socket')
-                }
+                socket.disconnect()
+                set({ socket: null, isConnected: false })
             }
         });
 

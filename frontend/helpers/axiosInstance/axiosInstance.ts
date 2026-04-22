@@ -151,6 +151,7 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import * as SecureStore from 'expo-secure-store';
 import { router } from 'expo-router';
+import useSocketStore from "../../stores/useSocketStore";
 
 const URL = process.env.EXPO_PUBLIC_API_URL
 
@@ -262,6 +263,10 @@ api.interceptors.response.use(
                     api.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
                     config.headers.Authorization = 'Bearer ' + accessToken;
 
+                    const { disconnectSocket, connectSocket } = useSocketStore.getState()
+                    disconnectSocket()
+                    connectSocket()
+
                     // Process all queued requests
                     processQueue(null, accessToken);
 
@@ -344,6 +349,10 @@ api.interceptors.response.use(
                     // Update the authorization header
                     api.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
                     originalRequest.headers.Authorization = 'Bearer ' + accessToken;
+
+                    const { disconnectSocket, connectSocket } = useSocketStore.getState()
+                    disconnectSocket()
+                    connectSocket()
 
                     // Process all queued requests
                     processQueue(null, accessToken);

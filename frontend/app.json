@@ -109,7 +109,8 @@
           "photosPermission": "Allow Messenger to access your photos",
           "savePhotosPermission": "Allow Messenger to save media"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "extra": {
       "router": {},

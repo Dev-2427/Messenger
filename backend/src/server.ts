@@ -44,6 +44,8 @@ const io = new Server(httpServer, {
 })
 
 io.adapter(createAdapter(pubClient, subClient))
+await pubClient.del('online_users')
+console.log('✅ Cleared stale online users')
 
 app.set('io', io)
 
