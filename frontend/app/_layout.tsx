@@ -11,6 +11,7 @@ import useSocketStore from "../stores/useSocketStore";
 import NetInfo from '@react-native-community/netinfo'
 import * as Notifications from "expo-notifications";
 import { useShareIntent } from "expo-share-intent";
+import { AppState } from 'react-native';
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* reloading the app might cause this to error, which is fine */
@@ -38,6 +39,21 @@ export default function RootLayout() {
   const { hasShareIntent, resetShareIntent, shareIntent } = useShareIntent()
 
   // auth and socket
+
+  useEffect(() => {
+    if (!isAuthenticated) return
+
+    const subscription = AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'background' || nextState === 'inactive') {
+        disconnectSocket()
+      } else if (nextState === 'active') {
+        connectSocket()
+      }
+    })
+
+    return () => subscription.remove()
+  }, [isAuthenticated])
+
   useEffect(() => {
     checkAuth();
   }, []);

@@ -143,6 +143,7 @@ io.on('connection', async (socket) => {
 
 
     socket.on('disconnect', async () => {
+        console.log(`Socket ${socket.id} disconnect event fired for user ${userId}`)
         if (!userId) return
 
         if (userId) {
