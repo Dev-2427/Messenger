@@ -31,7 +31,6 @@ export default function CommunityPeople() {
                 <Pressable
                     onPress={() => safePush({
                         pathname: `/messages/messageScreen/${item._id}`,
-                        params: { type: 'direct' }
                     })}
                     className='flex-row items-center  border-b-[0.5px] py-2'
                     style={{ borderColor: 'rgba(0, 0, 0, 0.05)' }}
@@ -64,7 +63,6 @@ export default function CommunityPeople() {
                             setMessage('👋')
                             router.push({
                                 pathname: `/messages/messageScreen/${item._id}`,
-                                params: { type: 'direct' }
                             })
                         }}
                         className='w-[20px] h-[20px] p-4 justify-center items-center rounded-full' style={{ backgroundColor: mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(225, 225, 225, 0.25)' }}>

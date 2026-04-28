@@ -108,7 +108,6 @@ const useAuthStore = create<AuthState>((set, get) => ({
                         justSendEmail: "false"
                     }
                 })
-
             } else {
                 Toast.show({
                     type: 'success',

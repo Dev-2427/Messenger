@@ -2,8 +2,6 @@ import { create } from "zustand";
 import { Socket, io } from "socket.io-client";
 import useChatAndMessageStore from "./chatAndMessageStore";
 import * as SecureStore from 'expo-secure-store'
-import api from "../helpers/axiosInstance/axiosInstance";
-import useAuthStore from "./authStore";
 
 export const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 

@@ -46,10 +46,10 @@ export default function RecentChats() {
   const chatIdsToDelete = useChatAndMessageStore((state) => state.chatIdsToDelete)
   const removeChatIdToDeleteArray = useChatAndMessageStore((state) => state.removeChatIdToDeleteArray)
   const clearChatIdToDeleteArray = useChatAndMessageStore((state) => state.clearChatIdToDeleteArray)
-  
+
   const user = useAuthStore((state) => state.user)
   const mode = useThemeStore((s) => s.mode)
-  
+
   const [refreshing, setRefreshing] = React.useState(false)
 
   useEffect(() => {
@@ -78,8 +78,8 @@ export default function RecentChats() {
 
   return (
     <FlatList<Chats | number>
-    refreshing={refreshing}
-    onRefresh={onRefresh}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
       data={(gettingChats ? skeletonData : chats) as (Chats | number)[]}
       keyExtractor={(item, index) => gettingChats ? `skeleton-${index}` : (item as Chats)._id}
       ListHeaderComponent={<AllUsers />}
@@ -123,7 +123,7 @@ export default function RecentChats() {
                   } else {
                     safePush({
                       pathname: `/messages/messageScreen/${chatItem._id}`,
-                      params: { type: chatItem.type, chatIdForRead: chatId }
+                      params: { chatIdForRead: chatId }
                     })
                   }
                 }}
@@ -164,7 +164,7 @@ export default function RecentChats() {
                       <View className='flex-row justify-center items-center gap-2'>
                         <Text className='text-[14px]'
                           style={{ color: style! }}
-                        >{chatItem.type === 'direct' && chatItem.lastMessage.senderId === user.id && 'You:' || chatItem.type === 'group' && chatItem.lastMessage.senderName} {chatItem.lastMessage.text || 'Media'}</Text>
+                        >{chatItem.lastMessage.senderId === user.id && 'You:'} {chatItem.lastMessage.text || 'Media'}</Text>
                         <Text
                           className='text-[14px]'
                           style={{ color: style! }}>
@@ -175,8 +175,7 @@ export default function RecentChats() {
 
                   <Ionicons
                     style={{ paddingRight: 0 }}
-                    name={chatItem.lastMessage.status === 'sent' ? 'checkmark-circle-outline' : chatItem.lastMessage.status === 'delivered' ? 'checkmark-done-circle' : 'checkmark-done-circle'}
-                    // color={chatItem.lastMessage.status === 'read' ? '#0584fe' : 'gray'}
+                    name={chatItem.lastMessage.status === 'sent' ? 'checkmark-circle-outline' : chatItem.lastMessage.status === 'read' ? 'checkmark-done-circle' : 'checkmark-done-circle'}
                     color={style}
                     size={22}
                   />

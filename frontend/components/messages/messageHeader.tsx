@@ -12,13 +12,12 @@ interface HeaderProps {
   avatar: string,
   name: string,
   id: string,
-  type: string,
   email?: string
   otherParticipantId: string | null
   lastSeen: Date | null
 }
 
-export default function MessageScreenHeader({ avatar, name, id, type, email, otherParticipantId, lastSeen }: HeaderProps) {
+export default function MessageScreenHeader({ avatar, name, id, email, otherParticipantId, lastSeen }: HeaderProps) {
 
   const mode = useThemeStore((state) => state.mode)
   const onlineUsers = useSocketStore((state) => state.onlineUsers)
@@ -28,7 +27,7 @@ export default function MessageScreenHeader({ avatar, name, id, type, email, oth
   return (
     <Pressable onPress={() => safePush({
       pathname: `/messages/userDetails/${id}`,
-      params: { type, avatar, name, email }
+      params: { avatar, name, email }
     }
     )}
       className='flex-row gap-[12px] px-[19px] py-5 items-center active:opacity-70 pt-16'

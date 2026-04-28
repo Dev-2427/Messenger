@@ -47,7 +47,9 @@ export default function RootLayout() {
       if (nextState === 'background' || nextState === 'inactive') {
         disconnectSocket()
       } else if (nextState === 'active') {
-        connectSocket()
+        setTimeout(() => {
+          connectSocket()
+        }, 300);
       }
     })
 
@@ -68,9 +70,9 @@ export default function RootLayout() {
       disconnectSocket()
     }
 
-    return () => {
-      disconnectSocket()
-    }
+    // return () => {
+    //   disconnectSocket()
+    // }
   }, [isAuthenticated, user.id, isLoading])
 
 

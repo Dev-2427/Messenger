@@ -16,19 +16,6 @@ export interface Media {
   fileId?: string
 }
 
-export interface DeliveredTo {
-  userId: string;
-  deliveredAt: Date;
-}
-
-export interface ReadBy {
-  userId: string;
-  readAt: Date;
-}
-
-export interface DeletedFor {
-  userId: string;
-}
 
 export interface Message {
   _id: string;
@@ -36,10 +23,7 @@ export interface Message {
   sender: User;
   text: string | null;
   media: Media[];
-  status: 'sent' | 'delivered' | 'read';
-  deliveredTo: DeliveredTo[];
-  readBy: ReadBy[];
-  deletedFor: DeletedFor[];
+  status: 'sent' | 'read';
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -47,19 +31,15 @@ export interface Message {
 
 export interface Chats {
   _id: string,
-  type: 'direct' | 'group',
   chatName: string,
   chatAvatar: string | null,
   chatAvatarId?: string,
   otherUser?: User,
-  participants?: User[],
-  groupAdmin?: User[],
   lastMessage: {
     text?: string,
-    senderName?: string,
     senderId: string,
     time: string,
-    status: 'sent' | 'delivered' | 'read'
+    status: 'sent' | 'read'
   }
 }
 

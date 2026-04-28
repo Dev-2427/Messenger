@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 import useGetUsers from '../../stores/getUsersStore'
 import { safePush } from '../../helpers/safeNavigation'
 import AllUsersSkeleton from '../loadingSkeletons/allUser'
-import useChatAndMessageStore from '../../stores/chatAndMessageStore'
 import useSocketStore from '../../stores/useSocketStore'
 import useUpdateProfile from '../../stores/updateProfileStore'
 
@@ -36,7 +35,6 @@ export default function AllUsers() {
                     onPress={() => {
                         safePush({
                             pathname: `/messages/messageScreen/${item._id}`,
-                            params: { type: 'direct' }
                         })
                     }
                     }

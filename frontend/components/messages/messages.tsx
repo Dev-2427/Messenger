@@ -104,7 +104,7 @@ function ChatVideo({ uri, onLongPress }: { uri: string; onLongPress?: () => void
     )
 }
 
-export default function Messages({ type, avatar, name }: { type: string, avatar: string, name: string }) {
+export default function Messages({ avatar, name }: { avatar: string, name: string }) {
 
     const getMessages = useChatAndMessageStore((state) => state.getMessages)
     const gettingMessages = useChatAndMessageStore((state) => state.gettingMessages)
@@ -216,7 +216,7 @@ export default function Messages({ type, avatar, name }: { type: string, avatar:
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item._id}
                 ListEmptyComponent={
-                    messages.length === 0 && type === 'direct' ? (
+                    messages.length === 0 ? (
                         <View className="mt-60 items-center">
                             {avatar ? (
                                 <Image
@@ -252,23 +252,6 @@ export default function Messages({ type, avatar, name }: { type: string, avatar:
                     return (
                         <View
                             className={`mt-[12px] flex-row  ${isMine ? 'justify-end' : 'justify-start'}`}>
-
-                            {type === 'group' && !isMine && (
-                                <View className="self-end mx-2">
-                                    {item.sender.avatar ? (
-                                        <Image
-                                            className="w-[28px] h-[28px] rounded-full"
-                                            source={{ uri: item.sender.avatar }}
-                                        />
-                                    ) : (
-                                        <View className="w-[28px] h-[28px] rounded-full bg-gray-200 justify-center items-center overflow-hidden">
-                                            <Text className="text-[14px] leading-[32px]">
-                                                {item.sender.fullName.charAt(0)}
-                                            </Text>
-                                        </View>
-                                    )}
-                                </View>
-                            )}
 
                             <View className={`max-w-[70%] gap-1 ${isMine ? 'justify-end' : 'justify-start'}`}>
 
@@ -369,12 +352,7 @@ export default function Messages({ type, avatar, name }: { type: string, avatar:
                                         }
                                         className="rounded-[18px]"
                                     >
-                                        {/* <Text
-                                            className={`text-[17px] py-[7.5px] px-[12px] ${isLight ? (isMine ? 'text-white' : 'text-black') : ('text-white')
-                                                }`}
-                                        >
-                                            {item.text}
-                                        </Text> */}
+                                     
                                         <MessageText text={item.text}
                                             isMine={isMine}
                                             isLight={isLight}

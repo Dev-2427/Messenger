@@ -11,19 +11,19 @@ import { useThemeStore } from '../../../stores/useThemeStore'
 
 export default function UserDetails() {
 
-  const { id, type, avatar, name, email } = useLocalSearchParams()
+  const { id, avatar, name, email } = useLocalSearchParams()
 
   const mode = useThemeStore((state) => state.mode)
 
   const isLight = mode === 'light'
 
   useEffect(() => {
-    if (!id || !type || !name) {
+    if (!id || !name) {
       router.back()
     }
-  }, [id, name, type])
+  }, [id, name])
 
-  if (!id || !type || !name) {
+  if (!id || !name) {
     return null
   }
 
