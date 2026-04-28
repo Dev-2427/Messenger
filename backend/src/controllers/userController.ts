@@ -59,7 +59,7 @@ async function signUp(req: Request<{}, {}, SignUpBody>, res: Response) {
             })
 
             await newUser.save()
-            userId = newUser.id.toString()
+            userId = newUser._id.toString()
 
         }
         const sendEmail = await sendVerificationEmail(email, newVerificationCode, fullName)
