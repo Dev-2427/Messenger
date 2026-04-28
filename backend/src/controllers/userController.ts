@@ -43,6 +43,8 @@ async function signUp(req: Request<{}, {}, SignUpBody>, res: Response) {
                 existingUser.verifyCode = newVerificationCode
 
                 await existingUser.save()
+                userId = existingUser._id.toString()
+
             }
         } else {
 
