@@ -196,6 +196,8 @@ async function verifyCode(req: Request<{}, {}, VerifyCodeBody>, res: Response) {
 
         const user = await User.findById(userId)
 
+        console.log('user log',user)
+
         if (!user) {
             return res.status(404).json({
                 success: false, message: 'User not found'
