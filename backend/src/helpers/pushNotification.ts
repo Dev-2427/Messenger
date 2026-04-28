@@ -8,7 +8,6 @@ type pushNotificationData = {
     senderId: string,
     senderAvatar: string | null,
     messageId: string | null,
-    type: string
 }
 
 export default async function sendPushNotification(
@@ -28,7 +27,7 @@ export default async function sendPushNotification(
         sound: 'default',
         title: title,
         body: body,
-        data: { ...data, url: `/messages/messageScreen/${data.chatId}`, type: data.type },
+        data: { ...data, url: `/messages/messageScreen/${data.chatId}`},
         channelId: 'messages',
         priority: 'high',
     }

@@ -44,7 +44,6 @@ async function signUp(req: Request<{}, {}, SignUpBody>, res: Response) {
 
                 await existingUser.save()
                 userId = existingUser._id.toString()
-
             }
         } else {
 
@@ -67,8 +66,8 @@ async function signUp(req: Request<{}, {}, SignUpBody>, res: Response) {
         const sendEmail = await sendVerificationEmail(email, newVerificationCode, fullName)
 
         if (!sendEmail.success) {
-            // return res.status(500).json({ success: false, message: sendEmail.message })
             console.error("Email send failed but continuing signup:", sendEmail.message);
+            return res.status(500).json({ success: false, message: sendEmail.message })
         }
 
         return res.status(201).json({ success: true, message: "A verification code has been sent to your email, please verify", userId })

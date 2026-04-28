@@ -4,8 +4,8 @@ import Chat, { type ChatType } from "../schema/chatSchema.js";
 import imagekit from "../helpers/imagekit.js";
 import Message from "../schema/messageSchema.js";
 import type { deleteMessageBody } from "../types/types.js";
-import crypto from 'crypto'
-import cloudinary from "../helpers/coudinary.js";
+// import crypto from 'crypto'
+// import cloudinary from "../helpers/coudinary.js";
 import mongoose from "mongoose";
 import sendPushNotification from "../helpers/pushNotification.js";
 import { pubClient } from "../helpers/redis/redis.js";
@@ -85,13 +85,11 @@ async function sendMessage(req: Request, res: Response) {
             }
 
             chat = await Chat.findOne({
-                type: 'direct',
                 participants: { $all: [userId, receiverId] }
             })
 
             if (!chat) {
                 chat = await Chat.create({
-                    type: 'direct',
                     participants: [userId, receiverId],
                     lastMessage: null,
                     lastMessageTime: null
@@ -170,7 +168,6 @@ async function sendMessage(req: Request, res: Response) {
                     socketIds = await pubClient.smembers(`user:${pId.toString()}`)
                 } catch (error) {
                     console.error('Failed to get socket ids', error)
-                    // continue
                 }
 
                 if (socketIds && socketIds.length) {
@@ -183,7 +180,7 @@ async function sendMessage(req: Request, res: Response) {
                         io.to(socketId).emit('receiveMessage', {
                             message: responseMessage,
                             chatId: chat!._id,
-                            type: chat!.type
+
                         })
                     }
                 } else {
@@ -192,7 +189,6 @@ async function sendMessage(req: Request, res: Response) {
                         const sender = await User.findById(userId)
 
                         if (receiver && receiver.expoPushToken && sender?.expoPushToken !== receiver.expoPushToken) {
-                            // if (receiver && receiver.expoPushToken) {
                             const sender = responseMessage?.sender as any
 
                             await sendPushNotification(
@@ -204,7 +200,6 @@ async function sendMessage(req: Request, res: Response) {
                                     senderId: sender._id.toString(),
                                     senderAvatar: sender.avatar || null,
                                     messageId: responseMessage?._id.toString() || null,
-                                    type: chat.type.toString()
                                 }
                             )
                         }
@@ -225,7 +220,6 @@ async function sendMessage(req: Request, res: Response) {
                 data: {
                     message: responseMessage,
                     chatId: chat._id,
-                    type: chat.type,
                     id
                 }
             })
@@ -273,45 +267,23 @@ async function getChats(req: Request, res: Response) {
         const formattedChats = chats.map(chat => {
             const chatObj = chat.toObject()
 
-            if (chat.type === 'direct') {
-                const participants = chat.participants as any[]
-                const otherParticipant = participants.find((p: any) => (
-                    p._id.toString() !== userId.toString()
-                ))
+            const participants = chat.participants as any[]
+            const otherParticipant = participants.find((p: any) => (
+                p._id.toString() !== userId.toString()
+            ))
 
-                const lastMessage = (chatObj.lastMessage as any)?.text || ''
+            const lastMessage = (chatObj.lastMessage as any)?.text || ''
 
-                return {
-                    _id: chatObj._id,
-                    type: chatObj.type,
-                    chatName: otherParticipant?.fullName,
-                    chatAvatar: otherParticipant?.avatar,
-                    otherUser: otherParticipant,
-                    lastMessage: {
-                        text: truncateText(lastMessage),
-                        senderId: (chatObj.lastMessage as any)?.sender?._id,
-                        time: chatObj.lastMessageTime,
-                        status: (chatObj.lastMessage as any)?.status
-                    }
-                }
-
-            } else {
-
-                const lastMessage = (chatObj.lastMessage as any)?.text || ''
-
-                return {
-                    _id: chatObj._id,
-                    type: chatObj.type,
-                    chatName: chatObj.groupName,
-                    chatAvatar: chatObj.groupAvatar,
-                    chatAvatarId: chatObj.groupAvatarId,
-                    lastMessage: {
-                        text: truncateText(lastMessage),
-                        senderName: (chatObj.lastMessage as any)?.sender?.fullName,
-                        senderId: (chatObj.lastMessage as any)?.sender?._id,
-                        time: chatObj.lastMessageTime,
-                        status: (chatObj.lastMessage as any)?.status
-                    }
+            return {
+                _id: chatObj._id,
+                chatName: otherParticipant?.fullName,
+                chatAvatar: otherParticipant?.avatar,
+                otherUser: otherParticipant,
+                lastMessage: {
+                    text: truncateText(lastMessage),
+                    senderId: (chatObj.lastMessage as any)?.sender?._id,
+                    time: chatObj.lastMessageTime,
+                    status: (chatObj.lastMessage as any)?.status
                 }
             }
         })
@@ -357,7 +329,6 @@ async function getMessages(req: Request, res: Response) {
 
         if (!chatId) {
             chat = await Chat.findOne({
-                type: 'direct',
                 participants: { $all: [userId, receiverId] },
             })
 
@@ -643,115 +614,117 @@ async function deleteMultipleChats(req: Request, res: Response) {
 
 }
 
-async function imagekitAuth(req: Request, res: Response) {
-    try {
-        const authParams = imagekit.getAuthenticationParameters()
+// async function imagekitAuth(req: Request, res: Response) {
+//     try {
+//         const authParams = imagekit.getAuthenticationParameters()
 
-        return res.status(200).json({ success: true, message: 'Authenticated successfully', authParams })
+//         return res.status(200).json({ success: true, message: 'Authenticated successfully', authParams })
 
-        // const userId = req.user?.id.toString()
+//         // const userId = req.user?.id.toString()
 
-        // const timestamp = Math.floor(Date.now() / 1000)
-        // const folder = 'media/test'
-        // const tags = `user_${userId},avatar,temp`
-
-
-        // const toSign = {
-        //     timestamp, folder, tags
-        // }
-
-        // const signature = cloudinary.utils.api_sign_request(
-        //     toSign,
-        //     process.env.CLOUDINARY_API_SECRET!
-        // )
-
-        // return res.status(200).json({
-        //     success: true, message: 'Signature created successfuly',
-        //     authParams: {
-        //         ...toSign,
-        //         signature,
-        //         apiKey: process.env.CLOUDINARY_API_KEY,
-        //         cloudName: process.env.CLOUDINARY_NAME,
-        //     }
-        // })
-    } catch (error) {
-        console.error('Failed to authenticate imagekit:', error)
-        res.status(500).json({ success: false, message: 'Failed to authenticate' })
-    }
-}
-
-async function permanent(req: Request, res: Response) {
-    // const { publicId, resourceType } = req.body
-    const { fileId, filePath } = req.body
-    const userId = req.user?.id
-
-    try {
-        await imagekit.updateFileDetails(fileId, {
-            tags: [`user_${userId}`]
-        })
-
-        await imagekit.moveFile({
-            sourceFilePath: filePath,
-            destinationPath: '/media'
-        })
-
-        // await imagekit.getFileDetails()
-
-        // const asset = await cloudinary.api.resource(publicId, {
-        //     resource_type: resourceType
-        // });
-
-        // // 2️⃣ Security check – make sure user owns it
-        // if (!asset.tags.includes(`user_${userId}`)) {
-        //     return res.status(403).json({
-        //         success: false,
-        //         message: "You do not own this file"
-        //     });
-        // }
+//         // const timestamp = Math.floor(Date.now() / 1000)
+//         // const folder = 'media/test'
+//         // const tags = `user_${userId},avatar,temp`
 
 
-        // await cloudinary.uploader.add_tag('permanent', publicId)
-        // await cloudinary.uploader.remove_tag('temp', publicId)
+//         // const toSign = {
+//         //     timestamp, folder, tags
+//         // }
 
-        // await cloudinary.uploader.explicit(publicId, {
-        //     type: 'upload',
-        //     asset_folder: 'media/permanent'
-        // })
+//         // const signature = cloudinary.utils.api_sign_request(
+//         //     toSign,
+//         //     process.env.CLOUDINARY_API_SECRET!
+//         // )
+
+//         // return res.status(200).json({
+//         //     success: true, message: 'Signature created successfuly',
+//         //     authParams: {
+//         //         ...toSign,
+//         //         signature,
+//         //         apiKey: process.env.CLOUDINARY_API_KEY,
+//         //         cloudName: process.env.CLOUDINARY_NAME,
+//         //     }
+//         // })
+//     } catch (error) {
+//         console.error('Failed to authenticate imagekit:', error)
+//         res.status(500).json({ success: false, message: 'Failed to authenticate' })
+//     }
+// }
 
 
-        // save in db
-        // const media = await Media.create({
-        //       user: userId,
-        //   publicId,
-        //   url: secureUrl,
-        //   resourceType,
-        //   width,
-        //   height,
-        //   size
-        //   });
 
-        return res.status(200).json({
-            success: true, message: 'Expiry changed successfuly'
-        })
+// async function permanent(req: Request, res: Response) {
+//     // const { publicId, resourceType } = req.body
+//     const { fileId, filePath } = req.body
+//     const userId = req.user?.id
 
-    } catch (error) {
-        console.error('save media failed:', error)
+//     try {
+//         await imagekit.updateFileDetails(fileId, {
+//             tags: [`user_${userId}`]
+//         })
 
-        // if (publicId) {
-        if (fileId) {
-            try {
-                // await cloudinary.uploader.destroy(publicId, { resource_type: resourceType })
-                await imagekit.deleteFile(fileId)
-            } catch (e) {
-                console.error('Rollback failed:', e)
-            }
-        }
-        return res.status(500).json({
-            success: false, message: 'could not save media'
-        })
+//         await imagekit.moveFile({
+//             sourceFilePath: filePath,
+//             destinationPath: '/media'
+//         })
 
-    }
-}
+//         // await imagekit.getFileDetails()
+
+//         // const asset = await cloudinary.api.resource(publicId, {
+//         //     resource_type: resourceType
+//         // });
+
+//         // // 2️⃣ Security check – make sure user owns it
+//         // if (!asset.tags.includes(`user_${userId}`)) {
+//         //     return res.status(403).json({
+//         //         success: false,
+//         //         message: "You do not own this file"
+//         //     });
+//         // }
+
+
+//         // await cloudinary.uploader.add_tag('permanent', publicId)
+//         // await cloudinary.uploader.remove_tag('temp', publicId)
+
+//         // await cloudinary.uploader.explicit(publicId, {
+//         //     type: 'upload',
+//         //     asset_folder: 'media/permanent'
+//         // })
+
+
+//         // save in db
+//         // const media = await Media.create({
+//         //       user: userId,
+//         //   publicId,
+//         //   url: secureUrl,
+//         //   resourceType,
+//         //   width,
+//         //   height,
+//         //   size
+//         //   });
+
+//         return res.status(200).json({
+//             success: true, message: 'Expiry changed successfuly'
+//         })
+
+//     } catch (error) {
+//         console.error('save media failed:', error)
+
+//         // if (publicId) {
+//         if (fileId) {
+//             try {
+//                 // await cloudinary.uploader.destroy(publicId, { resource_type: resourceType })
+//                 await imagekit.deleteFile(fileId)
+//             } catch (e) {
+//                 console.error('Rollback failed:', e)
+//             }
+//         }
+//         return res.status(500).json({
+//             success: false, message: 'could not save media'
+//         })
+
+//     }
+// }
 
 async function markAsRead(req: Request, res: Response) {
     const { chatId } = req.body
@@ -790,4 +763,8 @@ async function markAsRead(req: Request, res: Response) {
 }
 
 
-export { sendMessage, getChats, getMessages, deleteMessage, editMessage, imagekitAuth, permanent, deleteMultipleChats, markAsRead }
+export {
+    sendMessage, getChats, getMessages, deleteMessage, editMessage,
+    // imagekitAuth, permanent,
+    deleteMultipleChats, markAsRead
+}

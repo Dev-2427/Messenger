@@ -16,6 +16,10 @@ const MessageSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    seen: {
+        type: Boolean,
+        default: false
+    },
     media: [{
         type: {
             type: String,
@@ -33,29 +37,9 @@ const MessageSchema = new mongoose.Schema({
     }],
     status: {
         type: String,
-        enum: ['sent', 'delivered', 'read'],
+        enum: ['sent', 'read'],
         default: 'sent'
     },
-    deliveredTo: [{
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        deliveredAt: {
-            type: Date,
-            default: Date.now
-        }
-    }],
-    readBy: [{
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        readAt: {
-            type: Date,
-            default: Date.now
-        }
-    }]
 }, { timestamps: true })
 
 type MessageType = InferSchemaType<typeof MessageSchema>

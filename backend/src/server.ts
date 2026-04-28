@@ -8,7 +8,7 @@ import authRouter from './routes/authRoutes.js'
 import profileRouter from './routes/profileRoutes.js'
 import userDataRouter from './routes/userDataRoutes.js'
 import chatAndMessageRouter from './routes/chatAndMessageRoutes.js'
-import './helpers/cleanTempMedia.js'
+// import './helpers/cleanTempMedia.js'
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import User from './schema/userSchema.js';
