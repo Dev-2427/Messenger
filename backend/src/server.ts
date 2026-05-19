@@ -98,7 +98,20 @@ app.get('/health', (req: Request, res: Response) => {
 
 io.use(async (socket, next) => {
     try {
-        const token = socket.handshake.auth.token
+         let token =
+            socket.handshake.auth?.token
+
+        // Web fallback
+        if (!token) {
+
+            const cookies =
+                cookie.parse(
+                    socket.handshake.headers.cookie || ""
+                )
+
+            token = cookies.accessToken
+        }
+
 
         if (!token) {
             return next(new Error('Unauthorized'))
