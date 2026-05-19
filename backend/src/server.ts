@@ -99,7 +99,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 io.use(async (socket, next) => {
     try {
-        let token =
+         let token =
             socket.handshake.auth?.token
 
         // Web fallback

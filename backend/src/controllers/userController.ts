@@ -67,7 +67,7 @@ async function signUp(req: Request<{}, {}, SignUpBody>, res: Response) {
 
         if (!sendEmail.success) {
             console.error("Email send failed but continuing signup:", sendEmail.message);
-            return res.status(500).json({ success: false, message: sendEmail.message })
+            //return res.status(500).json({ success: false, message: sendEmail.message })
         }
 
         return res.status(201).json({ success: true, message: "A verification code has been sent to your email, please verify", userId })
