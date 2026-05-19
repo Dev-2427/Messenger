@@ -17,6 +17,7 @@ import { pubClient, subClient } from './helpers/redis/redis.js';
 import { createAdapter } from '@socket.io/redis-adapter';
 import jwt from 'jsonwebtoken'
 import type { decodedToken } from './middleware/authMiddleware.js';
+import cookie from 'cookie'
 
 const app = express()
 const httpServer = createServer(app)     // io
@@ -98,7 +99,20 @@ app.get('/health', (req: Request, res: Response) => {
 
 io.use(async (socket, next) => {
     try {
-        const token = socket.handshake.auth.token
+        let token =
+            socket.handshake.auth?.token
+
+        // Web fallback
+        if (!token) {
+
+            const cookies =
+                cookie.parse(
+                    socket.handshake.headers.cookie || ""
+                )
+
+            token = cookies.accessToken
+        }
+
 
         if (!token) {
             return next(new Error('Unauthorized'))

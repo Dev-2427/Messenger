@@ -14,7 +14,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 const options: CookieOptions = {
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'none',
     secure: process.env.NODE_ENV === 'production'
 }
 
@@ -197,7 +197,7 @@ async function verifyCode(req: Request<{}, {}, VerifyCodeBody>, res: Response) {
 
         const user = await User.findById(userId)
 
-        console.log('user log',user)
+        console.log('user log', user)
 
         if (!user) {
             return res.status(404).json({

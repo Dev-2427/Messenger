@@ -2,11 +2,10 @@ import { View, KeyboardAvoidingView, Platform, Keyboard, ActivityIndicator } fro
 import React, { useEffect, useState } from 'react'
 import MessageScreenHeader from "../../../components/messages/messageHeader";
 import { router, useLocalSearchParams } from 'expo-router';
-import useGetUsers, { User } from '../../../stores/getUsersStore';
+import useGetUsers from '../../../stores/getUsersStore';
 import { StatusBar } from 'expo-status-bar';
 import Textbar from '../../../components/messages/textbar';
 import useChatAndMessageStore, { FileMeta } from '../../../stores/chatAndMessageStore';
-import { Chats } from '../../../types';
 import Messages from '../../../components/messages/messages';
 import { useThemeStore } from '../../../stores/useThemeStore';
 
@@ -104,7 +103,7 @@ export default function MessageScreen() {
     return null
   }
 
-  if (!user || !chat) {
+  if (!user && !chat) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator />
@@ -138,7 +137,7 @@ export default function MessageScreen() {
       >
 
         <View style={{ flex: 1 }}>
-          <Messages  name={name} avatar={avatar as string} />
+          <Messages name={name} avatar={avatar as string} />
         </View>
 
 
