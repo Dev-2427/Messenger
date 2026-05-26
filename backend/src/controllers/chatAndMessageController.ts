@@ -9,6 +9,7 @@ import type { deleteMessageBody } from "../types/types.js";
 import mongoose from "mongoose";
 import sendPushNotification from "../helpers/pushNotification.js";
 import { pubClient } from "../helpers/redis/redis.js";
+import { pid } from "process";
 
 function truncateText(text: string, maxLength: number = 15): string {
     if (!text) return '';
@@ -467,6 +468,18 @@ async function deleteMessage(req: Request<{}, {}, deleteMessageBody>, res: Respo
             }
         }
 
+        const io = req.app.get("io")
+
+        const otherParticipants = chat.participants.filter((p) => p.toString() !== userId.toString())
+
+        for (const pId of otherParticipants) {
+            const socketIds = await pubClient.smembers(`user:${pId.toString()}`)
+
+            for (const socketId of socketIds) {
+                io.to(socketId).emit("messageDeleted", { contextMenu: req.body })
+            }
+        }
+
         return res.status(200).json({
             success: true, message: 'Message deleted successfully'
         })
@@ -526,6 +539,18 @@ async function editMessage(req: Request, res: Response) {
 
         message.text = text
         await message.save()
+
+        const io = req.app.get("io")
+
+        const otherParticipant = chat.participants.filter((p) => p.toString() !== userId.toString())
+
+        for (const pId of otherParticipant) {
+            const socketIds = await pubClient.smembers(`user:${pid.toString()}`)
+
+            for (const socketId of socketIds) {
+                io.to(socketId).emit("messageEdited", { messageId, text })
+            }
+        }
 
         return res.status(200).json({
             success: true, message: "Message edited successfully"

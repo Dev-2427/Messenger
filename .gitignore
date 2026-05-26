@@ -23,6 +23,10 @@ frontend/web-build/
 frontend/google-services.json
 frontend/*firebase-adminsdk*.json
 
+react_web/node_modules/
+react_web/dist/
+react_web/.env*
+
 # ───── OS ─────
 .DS_Store
 Thumbs.db
