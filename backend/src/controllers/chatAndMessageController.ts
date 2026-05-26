@@ -545,7 +545,7 @@ async function editMessage(req: Request, res: Response) {
         const otherParticipant = chat.participants.filter((p) => p.toString() !== userId.toString())
 
         for (const pId of otherParticipant) {
-            const socketIds = await pubClient.smembers(`user:${pid.toString()}`)
+            const socketIds = await pubClient.smembers(`user:${pId.toString()}`)
 
             for (const socketId of socketIds) {
                 io.to(socketId).emit("messageEdited", { messageId, text })
