@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 
 import Signup from './pages/auth/Signup'
 import Signin from './pages/auth/Signin'
+import VerifyEmail from './pages/auth/VerifyEmail'
 import VerifyCode from './pages/auth/VerifyCode'
 import ResetPassword from './pages/auth/ResetPassword'
 
@@ -84,7 +85,8 @@ function App() {
         <Route element={<PublicRoute />}>
           <Route path='/signup' element={<Signup />} />
           <Route path='/signin' element={<Signin />} />
-          <Route path='/verifyCode/:email/:userId/:justSendEmail' element={<VerifyCode />} />
+          <Route path='/verifyEmail' element={<VerifyEmail />} />
+          <Route path='/verifyCode/:userId/:justSendEmail' element={<VerifyCode />} />
           <Route path='/resetPassword/:userId' element={<ResetPassword />} />
         </Route>
 

@@ -25,8 +25,18 @@ export default function VerifyCode() {
     handleSubmit,
     formState: { errors }
   } = useForm<VerifyCodeFormData>({
-    resolver: zodResolver(verifyCodeSchema)
+    resolver: zodResolver(verifyCodeSchema),
+    defaultValues:
+      { justSendEmail: params.justSendEmail }
   })
+
+  if (!params.justSendEmail || !params.userId) {
+    navigate("/signin", {
+      replace: true
+    })
+
+    return null
+  }
 
   const onSubmit = async (data: VerifyCodeFormData) => {
     await verifyCode(data, params.userId, navigate)

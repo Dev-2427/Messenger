@@ -103,7 +103,7 @@ const authStore = create<AuthStore>((set) => ({
             const res = await api.post('/api/auth/sign_up', data)
 
             if (res.data.success) {
-                navigate(`/verifyCode/${res.data.email}/${res.data.userId}/false`)
+                navigate(`/verifyCode/${res.data.userId}/false`)
             } else {
                 toast.error(res.data.message)
             }
@@ -172,8 +172,9 @@ const authStore = create<AuthStore>((set) => ({
 
             if (res.data.success) {
                 toast.success(res.data.message)
-                navigate(`/verifyCode/${data.email}/${res.data.userId}/true`)
+                navigate(`/verifyCode/${res.data.userId}/true`)
             } else {
+                console.log("errrrrrr", res.data)
                 toast.error(res.data.message)
             }
         } catch (error) {

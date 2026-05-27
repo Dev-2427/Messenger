@@ -5,7 +5,7 @@ import { sendPassword } from '../../schemas/schema'
 import authStore from '../../store/authStore'
 import { Moon, Sun } from "lucide-react"
 import useThemeStore from "../../store/useThemeStore"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 
 type ResetPasswordFormData = z.infer<typeof sendPassword>
@@ -13,6 +13,7 @@ type ResetPasswordFormData = z.infer<typeof sendPassword>
 export default function ResetPassword() {
 
   const navigate = useNavigate()
+  const params = useParams()
 
   const mode = useThemeStore((s) => s.mode)
   const toggleMode = useThemeStore((s) => s.toggleMode)
@@ -25,8 +26,17 @@ export default function ResetPassword() {
     handleSubmit,
     formState: { errors }
   } = useForm<ResetPasswordFormData>({
-    resolver: zodResolver(sendPassword)
+    resolver: zodResolver(sendPassword),
+    defaultValues: { userId: params.userId }
   })
+
+  if (!params.userId) {
+    navigate("/signin", {
+      replace: true
+    })
+
+    return null
+  }
 
   const onSubmit = async (data: ResetPasswordFormData) => {
     await resetPasswordSubmit(data, navigate)
@@ -124,9 +134,11 @@ export default function ResetPassword() {
         <button
           disabled={isVerifyingPassword}
           type='submit'
-          className='w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 disabled:opacity-50'
+          className='w-full h-14 rounded-2xl bg-zinc-900 dark:bg-zinc-200 text-white dark:text-zinc-900 font-semibold transition-colors duration-200 hover:opacity-90 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
         >
-          {isVerifyingPassword ? 'Updating...' : 'Update Password'}
+          {isVerifyingPassword
+            ? 'Updating...'
+            : 'Update Password'}
         </button>
 
       </form>
