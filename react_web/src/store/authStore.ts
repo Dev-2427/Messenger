@@ -260,7 +260,8 @@ const authStore = create<AuthStore>((set) => ({
             if (res.data.success) {
                 set({ user: res.data.userData, isAuthenticated: true })
             } else {
-                toast.error(res.data.message)
+                res.data.message !== "No token found" &&
+                    toast.error(res.data.message)
             }
         } catch (error) {
             console.error('Something went wrong:', error)
