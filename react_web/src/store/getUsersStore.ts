@@ -31,7 +31,7 @@ const getUsersStore = create<UseGetUsersStore>((set) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error getting users:', error)
             toast.error(error.response?.data?.message || 'Failed to get users')
         }finally{

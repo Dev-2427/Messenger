@@ -14,7 +14,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 const options: CookieOptions = {
     httpOnly: true,
-    sameSite: 'none',
+    sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax",
     secure: process.env.NODE_ENV === 'production'
 }
 

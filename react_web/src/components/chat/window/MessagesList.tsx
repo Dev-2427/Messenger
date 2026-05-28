@@ -12,7 +12,7 @@ export default function MessagesList() {
   )
 
   const user = useAuthStore((s) => s.user)
-  const bottomRef = useRef(null)
+  const bottomRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const timeout = setTimeout(() => {

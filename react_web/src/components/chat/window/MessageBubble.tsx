@@ -114,7 +114,7 @@ export default function MessageBubble({
                     {/* Text */}
                     {message.text && (
                         <div className="hover:cursor-pointer"
-                            onTouchEnd={(e) => e.preventDefault()}
+                            // onTouchEnd={(e) => e.preventDefault()}
                             {...textLongPress()}
                             onContextMenu={(e) => {
                                 e.preventDefault()
@@ -157,7 +157,7 @@ export default function MessageBubble({
                     y={menu.y}
                     isMine={isMine}
 
-                    type={contextData?.type}
+                    type={contextData!.type}
 
                     onClose={() => setMenu(null)}
 

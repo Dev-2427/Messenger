@@ -1,5 +1,18 @@
 import { Copy, Pencil, Trash2, Download } from "lucide-react"
 
+interface MessageContextMenuProp {
+    x: number,
+    y: number,
+    isMine: boolean,
+    onClose: () => void,
+    onDelete: () => void,
+    onCopy: () => void,
+    onEdit: () => void,
+    type: "text" | "media",
+    onDownload: () => Promise<void>,
+    downloading: boolean
+}
+
 export default function MessageContextMenu({
     x,
     y,
@@ -11,7 +24,7 @@ export default function MessageContextMenu({
     type,
     onDownload,
     downloading
-}) {
+}: MessageContextMenuProp) {
 
     const menuWidth = 192
     const menuHeight = 220

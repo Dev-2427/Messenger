@@ -1,9 +1,19 @@
 import { X } from "lucide-react"
+interface UserProfileOverlayProps {
+    profileData: {
+        id: string,
+        name: string,
+        email: string,
+        avatar?: string | null,
+        lastSeen?: Date | null
+    } | null,
+    onClose: () => void
 
+}
 export default function UserProfileOverlay({
     profileData,
     onClose,
-}) {
+}: UserProfileOverlayProps) {
 
     if (!profileData) return null
 

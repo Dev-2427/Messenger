@@ -109,7 +109,7 @@ const authStore = create<AuthStore>((set) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Google signin failed", error)
             toast.error(error.response?.data?.message || "Google signin failed")
         }
@@ -126,7 +126,7 @@ const authStore = create<AuthStore>((set) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Signup failed', error)
             toast.error(error.response?.data?.message || 'Signup failed')
         } finally {
@@ -150,7 +150,7 @@ const authStore = create<AuthStore>((set) => ({
                 toast.error(res.data.message)
             }
             console.log(res.data)
-        } catch (error) {
+        } catch (error: any) {
             console.error('Signin Failed:', error)
             toast.error(error.response?.data?.message || 'Signin failed')
         } finally {
@@ -175,7 +175,7 @@ const authStore = create<AuthStore>((set) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Verification failed:', error)
             toast.error(error.response?.data?.message || 'Verification failed')
         } finally {
@@ -196,7 +196,7 @@ const authStore = create<AuthStore>((set) => ({
                 console.log("errrrrrr", res.data)
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to verify email:', error)
             toast.error(error.response?.data?.message || 'Failed to verify email')
         } finally {
@@ -216,7 +216,7 @@ const authStore = create<AuthStore>((set) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to reset password:', error)
             toast.error(error.response?.data?.message || 'Failed to reset password')
         } finally {
@@ -239,7 +239,7 @@ const authStore = create<AuthStore>((set) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error on logout:', error)
             toast.error(error.response?.data?.message || 'Failed to logout')
         } finally {
@@ -263,7 +263,7 @@ const authStore = create<AuthStore>((set) => ({
                 res.data.message !== "No token found" &&
                     toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Something went wrong:', error)
             set({
                 user: {} as AuthUser,
@@ -294,7 +294,7 @@ const authStore = create<AuthStore>((set) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Something went wrong while deleting account:', error)
             toast.error(error.response?.data?.message || 'Error on account deletion')
         } finally {

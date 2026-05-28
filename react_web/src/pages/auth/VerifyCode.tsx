@@ -39,7 +39,7 @@ export default function VerifyCode() {
   }
 
   const onSubmit = async (data: VerifyCodeFormData) => {
-    await verifyCode(data, params.userId, navigate)
+    await verifyCode(data, params.userId!, navigate)
   }
 
   return (

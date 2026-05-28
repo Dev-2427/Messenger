@@ -1,9 +1,12 @@
 import { X } from "lucide-react"
+import type { Media } from "../../../helpers/types"
 
-export default function MediaPreviewModal({
-    media,
-    onClose,
-}) {
+interface MediaPreviewModalProps {
+    media: Media | null,
+    onClose: () => void
+}
+
+export default function MediaPreviewModal({ media, onClose }: MediaPreviewModalProps) {
 
     if (!media) return null
 

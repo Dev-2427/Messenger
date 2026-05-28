@@ -63,7 +63,7 @@ const updateProfileStore = create(persist<UpdateProfileStore, [], [], Pick<Updat
                 toast.error(res.data.message
                 )
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to chnage avatar", error)
             toast.error(error.response?.data?.message || "Failed to change avatar")
         } finally {
@@ -112,7 +112,7 @@ const updateProfileStore = create(persist<UpdateProfileStore, [], [], Pick<Updat
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to set avatar:", error)
             toast.error(error.response?.data?.message || "Failed to set avatar")
         } finally {
@@ -137,7 +137,7 @@ const updateProfileStore = create(persist<UpdateProfileStore, [], [], Pick<Updat
             } else {
                 toast.error(res.data.success)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to send delete avatar request:", error)
             toast.error("Something went wrong")
         } finally {
@@ -166,7 +166,7 @@ const updateProfileStore = create(persist<UpdateProfileStore, [], [], Pick<Updat
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Something went wrong while changing username:', error)
             toast.error('Failed to change username')
         } finally {

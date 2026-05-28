@@ -35,7 +35,7 @@ export default function MessageMediaItem({
             {
                 chatId: message.chatId,
                 type: "media",
-                mediaId: mediaItem.fileId,
+                mediaId: mediaItem.fileId!,
                 messageId: message._id,
                 mediaUrl: mediaItem.url
             }
@@ -62,7 +62,7 @@ export default function MessageMediaItem({
                             {
                                 chatId: message.chatId,
                                 type: "media",
-                                mediaId: mediaItem.fileId,
+                                mediaId: mediaItem.fileId!,
                                 messageId: message._id,
                                 mediaUrl: mediaItem.url
                             }
@@ -93,7 +93,7 @@ export default function MessageMediaItem({
                             {
                                 chatId: message.chatId,
                                 type: "media",
-                                mediaId: mediaItem.fileId,
+                                mediaId: mediaItem.fileId!,
                                 messageId: message._id,
                                 mediaUrl: mediaItem.url
                             }

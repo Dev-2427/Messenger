@@ -27,7 +27,7 @@ export interface ChatAndMessageStore {
     isSelectingChats: boolean,
     setSelectingChatsFalse: () => void,
     setSelectingChatsTrue: () => void,
-    setEditableMessageId: (messageId: string) => void,
+    setEditableMessageId: (messageId: string | null) => void,
     clearMessageState: () => void,
     resetFileAndText: () => void,
     setMessage: (msg: string) => void,
@@ -187,7 +187,7 @@ const chatAndMessageStore = create<ChatAndMessageStore>((set, get) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Could not send message:', error)
             toast.error(error.response?.data?.message || 'Failed to send message')
         } finally {
@@ -206,7 +206,7 @@ const chatAndMessageStore = create<ChatAndMessageStore>((set, get) => ({
             } else {
                 res.data.message !== "No chat found" && toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to get chats:', error)
             toast.error(error.response?.data?.message || 'Failed to get chats')
         } finally {
@@ -235,7 +235,7 @@ const chatAndMessageStore = create<ChatAndMessageStore>((set, get) => ({
                 toast.error(res.data.message)
                 set({ messages: [] })
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error getting messages:', error)
             toast.error(error.response?.data?.message)
         } finally {
@@ -292,7 +292,7 @@ const chatAndMessageStore = create<ChatAndMessageStore>((set, get) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Could not send request, try again.', error)
             toast.error(error.response?.data?.message)
         } finally {
@@ -341,7 +341,7 @@ const chatAndMessageStore = create<ChatAndMessageStore>((set, get) => ({
             } else {
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to edit the message:', error)
             toast.error(error.response?.data?.message || 'Failed to edit the message')
         } finally {
@@ -483,7 +483,7 @@ const chatAndMessageStore = create<ChatAndMessageStore>((set, get) => ({
             }))
 
             if (activeChatId && chatIdsToDelete.includes(activeChatId)) {
-                set({ chatId: null, receiverId: null, messages: null })
+                set({ chatId: null, receiverId: null, messages: [] })
             }
 
             const res = await api.delete('/api/chat/delete_chats', { data: { chatIds: chatIdsToDelete } })
@@ -495,7 +495,7 @@ const chatAndMessageStore = create<ChatAndMessageStore>((set, get) => ({
                 set({ chats, chatIdsToDelete: [] })
                 toast.error(res.data.message)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Could not delete chats:', error)
             toast.error(error.response?.data?.message || 'Could not delete chats')
         }

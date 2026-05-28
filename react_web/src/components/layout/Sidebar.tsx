@@ -45,12 +45,14 @@ export default function Sidebar() {
                         />
                         :
                         (
-                            <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center">
+                            <button
+                                onClick={() => navigate("/settings")}
+                                className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center cursor-pointer">
 
                                 <span className="text-lg lg:text-xl font-semibold text-zinc-700 dark:text-zinc-200">                                    {user.name.charAt(0)}
                                 </span>
 
-                            </div>
+                            </button>
                         )
                     }
 
