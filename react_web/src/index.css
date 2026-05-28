@@ -6,8 +6,7 @@ html,
 body,
 #root {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
 }
 
 html,
@@ -69,9 +68,9 @@ body {
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(161,161,170,0.45) transparent;
+  scrollbar-color: rgba(161, 161, 170, 0.45) transparent;
 }
 
 .dark * {
-  scrollbar-color: rgba(82,82,91,0.55) transparent;
+  scrollbar-color: rgba(82, 82, 91, 0.55) transparent;
 }
