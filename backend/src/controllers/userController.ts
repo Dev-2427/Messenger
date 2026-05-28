@@ -386,6 +386,9 @@ async function signOut(req: Request, res: Response) {
         }
 
         user.refreshToken = null
+        if (platform === "mobile") {
+            user.expoPushToken = null
+        }
         await user.save()
 
         if (platform === 'mobile') {
