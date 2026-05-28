@@ -28,7 +28,7 @@ async function signUp(req: Request<{}, {}, SignUpBody>, res: Response) {
 
     try {
         const existingUser = await User.findOne({ email })
-        const newVerificationCode = Math.floor(100000 + Math.random() * 90000).toString()
+        const newVerificationCode = Math.floor(100000 + Math.random() * 900000).toString()
         let userId;
         console.log(newVerificationCode)
         if (existingUser) {
@@ -486,7 +486,16 @@ async function sendEmail(req: Request<{}, {}, sendEmailBody>, res: Response) {
                 success: false, message: 'Invalid email'
             })
         }
-        const newVerificationCode = Math.floor(100000 + Math.random() * 90000).toString()
+
+        if (!user.isVerified) {
+            return res.status(403).json({ success: false, message: "Account is not verified" })
+        }
+
+        if (user.authProvider === "google") {
+            return res.status(403).json({ success: false, message: "This account uses Google login" })
+        }
+
+        const newVerificationCode = Math.floor(100000 + Math.random() * 900000).toString()
 
         user.verifyCode = newVerificationCode
         user.verifyCodeExpiry = new Date(Date.now() + 10 * 60 * 1000)

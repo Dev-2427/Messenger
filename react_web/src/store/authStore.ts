@@ -27,6 +27,7 @@ interface AuthStore {
     deletingUser: boolean,
     needsAvatarSetup: boolean,
     setAvatar: (avatar: string, avatarId: string) => void,
+    googleAuth: (idToken: string, navigate: NavigateFunction) => Promise<void>,
     signIn: (data: z.infer<typeof signinSchema>, navigate: NavigateFunction) => Promise<void>,
     signUp: (data: z.infer<typeof signUpSchema>, navigate: NavigateFunction) => Promise<void>,
     verifyCode: (data: z.infer<typeof verifyCodeSchema>, userId: string, navigate: NavigateFunction) => Promise<void>,
@@ -94,6 +95,24 @@ const authStore = create<AuthStore>((set) => ({
 
     completeAvatarSetup: () => {
         set({ needsAvatarSetup: false })
+    },
+
+    googleAuth: async (idToken, navigate) => {
+        try {
+            const res = await api.post("/api/auth/google_auth", { idToken })
+
+            if (res.data.success) {
+                set({ user: res.data.userData, isAuthenticated: true })
+                toast.success(res.data.message)
+
+                navigate("/", { replace: true })
+            } else {
+                toast.error(res.data.message)
+            }
+        } catch (error) {
+            console.error("Google signin failed", error)
+            toast.error(error.response?.data?.message || "Google signin failed")
+        }
     },
 
     signUp: async (data, navigate) => {
@@ -281,9 +300,6 @@ const authStore = create<AuthStore>((set) => ({
             set({ deletingUser: false })
         }
     },
-
-
-
 
 
 }))

@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Moon, Sun } from "lucide-react"
 import useThemeStore from "../../store/useThemeStore"
+import useGoogleAuth from "../../helpers/useGoogleAuth"
 
 type SignupFormData = z.infer<typeof signUpSchema>
 
@@ -17,6 +18,8 @@ export default function Signup() {
     const signup = authStore((s) => s.signUp)
     const isSigningUp = authStore((s) => s.isSigningUp)
 
+    const { GoogleAuthButton } = useGoogleAuth()
+
     const navigate = useNavigate()
 
     const { register, handleSubmit, formState: { errors } } = useForm<SignupFormData>({ resolver: zodResolver(signUpSchema) })
@@ -27,7 +30,7 @@ export default function Signup() {
 
     return (
 
-        <div className='relative h-full overflow-y-auto bg-zinc-50 dark:bg-zinc-950 flex justify-center items-start md:items-center px-4 py-6 transition-colors duration-200'>
+        <div className='min-h-screen max-h-screen overflow-y-auto bg-zinc-50 dark:bg-zinc-950 flex justify-center items-start px-4 py-10 transition-colors duration-200'>
 
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -143,10 +146,22 @@ export default function Signup() {
                     {isSigningUp ? 'Creating...' : 'Signup'}
                 </button>
 
+                <div className="flex items-center gap-4">
+
+                    <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
+
+                    <span className="text-sm text-zinc-400 dark:text-zinc-500">
+                        OR
+                    </span>
+
+                    <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
+
+                </div>
+
+                <GoogleAuthButton />
+
                 <Link to={'/signin'} className='text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors duration-200 text-center underline underline-offset-4'>Already have an account?</Link>
             </form>
-
-
         </div>
 
     )
