@@ -47,7 +47,6 @@ export default function MessageMediaItem({
     return (
         <div
             {...mediaLongPress()}
-            onTouchEnd={(e) => e.preventDefault()}
             className="rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900"
         >
 

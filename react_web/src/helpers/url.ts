@@ -44,7 +44,14 @@ api.interceptors.response.use(
                 isRefreshing = true
 
                 try {
-                    await api.post('/api/auth/refresh')
+                    const res = await api.post('/api/auth/refresh')
+
+                    if (!res.data.success) {
+                        processQueue(new Error("Refresh failed"))
+                        authStore.getState().forceLogout()
+                        return response
+                    }
+
                     processQueue(null)
                     return api(originalRequest)
                 } catch (refreshError) {

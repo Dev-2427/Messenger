@@ -13,7 +13,7 @@ export default async function authCheck(req: Request, res: Response, next: NextF
 
     if (!token) {
         return res.status(408).json({
-            success: false, message: 'No token found'
+            success: false, message: 'Session expired'
         })
     }
 

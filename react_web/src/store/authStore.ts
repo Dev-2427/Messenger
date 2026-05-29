@@ -260,7 +260,7 @@ const authStore = create<AuthStore>((set) => ({
             if (res.data.success) {
                 set({ user: res.data.userData, isAuthenticated: true })
             } else {
-                res.data.message !== "No token found" &&
+                res.data.message !== "Session expired" &&
                     toast.error(res.data.message)
             }
         } catch (error: any) {

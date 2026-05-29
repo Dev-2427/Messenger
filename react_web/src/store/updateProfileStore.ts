@@ -36,7 +36,7 @@ const updateProfileStore = create(persist<UpdateProfileStore, [], [], Pick<Updat
     localFile: null,
     isUploading: false,
     isDeletingAvatar: false,
-    showActiveStatus: false,
+    showActiveStatus: true,
     hasHydrated: false,
     isUsernameEditable: false,
     changingUsername: false,

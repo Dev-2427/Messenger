@@ -19,7 +19,7 @@ export default function MediaPreviewModal({ media, onClose }: MediaPreviewModalP
             {/* Close */}
             <button
                 onClick={onClose}
-                className="absolute top-6 right-6 text-white"
+                className="absolute top-6 right-6 text-white cursor-pointer"
             >
                 <X size={32} />
             </button>
