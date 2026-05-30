@@ -9,7 +9,6 @@ import type { deleteMessageBody } from "../types/types.js";
 import mongoose from "mongoose";
 import sendPushNotification from "../helpers/pushNotification.js";
 import { pubClient } from "../helpers/redis/redis.js";
-import { pid } from "process";
 
 function truncateText(text: string, maxLength: number = 15): string {
     if (!text) return '';
@@ -32,7 +31,7 @@ async function sendMessage(req: Request, res: Response) {
     const files = req.files as Express.Multer.File[]
 
     if (!userId) {
-        return res.status(400)
+        return res.status(401)
             .json({ success: false, message: "Unauthorized request" })
     }
 
@@ -42,7 +41,7 @@ async function sendMessage(req: Request, res: Response) {
     }
 
     if (userId === receiverId) {
-        return res.status(404)
+        return res.status(400)
             .json({ success: false, message: "Cannot send message to yourself" })
     }
 
@@ -237,7 +236,7 @@ async function getChats(req: Request, res: Response) {
     const userId = req.user?.id
 
     if (!userId) {
-        return res.status(400).json({
+        return res.status(401).json({
             success: false, message: 'Unauthorized request'
         })
     }
@@ -246,7 +245,7 @@ async function getChats(req: Request, res: Response) {
         const user = await User.findById(userId)
 
         if (!user) {
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false, message: 'User not found'
             })
         }
@@ -296,7 +295,7 @@ async function getChats(req: Request, res: Response) {
 
     } catch (error) {
         console.error('Error on finding chats for the user', error)
-        return res.status(200).json({
+        return res.status(500).json({
             success: false, message: 'Error on finding chats for the user'
         })
     }
@@ -308,7 +307,7 @@ async function getMessages(req: Request, res: Response) {
     const { receiverId, chatId } = req.query
 
     if (!userId) {
-        return res.status(400).json({
+        return res.status(401).json({
             success: false, message: 'Not authorized'
         })
     }
@@ -385,19 +384,19 @@ async function deleteMessage(req: Request<{}, {}, deleteMessageBody>, res: Respo
     const { messageId, mediaId, type, chatId } = req.body
 
     if (!userId) {
-        return res.status(400).json({
+        return res.status(401).json({
             success: false, message: 'Unauthorized access'
         })
     }
 
     if (!messageId && !mediaId && !type && !chatId) {
-        return res.status(404).json({
+        return res.status(400).json({
             success: false, message: 'Details are required'
         })
     }
 
     if (!chatId || !messageId || !type) {
-        return res.status(404).json({
+        return res.status(400).json({
             success: false, message: 'Incomplete details'
         })
     }
@@ -407,8 +406,8 @@ async function deleteMessage(req: Request<{}, {}, deleteMessageBody>, res: Respo
         const chat = await Chat.findById(chatId)
 
         if (!chat) {
-            return res.status(400).json({
-                success: true, message: 'Invalid chatId'
+            return res.status(404).json({
+                success: false, message: 'Invalid chatId'
             })
         }
 
@@ -425,7 +424,7 @@ async function deleteMessage(req: Request<{}, {}, deleteMessageBody>, res: Respo
             const media = mediaList.find((m) => m.fileId === mediaId)
 
             if (!media) {
-                return res.status(400).json({
+                return res.status(404).json({
                     success: false, message: 'Invalid mediaId'
                 })
             }
@@ -501,13 +500,13 @@ async function editMessage(req: Request, res: Response) {
     const userId = req.user?.id
 
     if (!userId) {
-        return res.status(400).json({
+        return res.status(401).json({
             success: false, message: "Unauthorized access"
         })
     }
 
     if (!chatId || !messageId || !text || !text.trim()) {
-        return res.status(404).json({
+        return res.status(400).json({
             success: false, message: "Details are required"
         })
     }
@@ -517,22 +516,21 @@ async function editMessage(req: Request, res: Response) {
         const message = await Message.findById(messageId)
 
         if (!message) {
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false, message: "Invalid messageId"
             })
         }
 
         const chat = await Chat.findById(chatId)
 
-        console.log(chatId, chat?._id, message.chatId)
         if (!chat || chat._id.toString() !== message.chatId.toString()) {
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false, message: "Invalid chatId"
             })
         }
 
         if (message.sender._id.toString() !== userId.toString()) {
-            return res.status(404).json({
+            return res.status(403).json({
                 success: false, message: "Not authorized for this operation"
             })
         }
@@ -558,7 +556,7 @@ async function editMessage(req: Request, res: Response) {
 
     } catch (error) {
         console.error("Failed to edit the message from server", error)
-        return res.status(404).json({
+        return res.status(500).json({
             success: false, message: "Failed to edit the message from server"
         })
     }
@@ -760,20 +758,20 @@ async function markAsRead(req: Request, res: Response) {
     }
 
     if (!chatId) {
-        return res.status(401).json({ success: false, message: 'Chat id is required' })
+        return res.status(400).json({ success: false, message: 'Chat id is required' })
     }
 
     try {
         const chat = await Chat.findById(chatId).populate('lastMessage')
 
         if (!chat) {
-            return res.status(401).json({ success: false, message: 'Chat not found' })
+            return res.status(404).json({ success: false, message: 'Chat not found' })
         }
 
         const lastMessage = await Message.findById(chat.lastMessage)
 
         if (!lastMessage) {
-            return res.status(401).json({ success: false, message: 'LastMessage not found' })
+            return res.status(404).json({ success: false, message: 'LastMessage not found' })
         }
 
         lastMessage.status = 'read'

@@ -197,8 +197,6 @@ async function verifyCode(req: Request<{}, {}, VerifyCodeBody>, res: Response) {
 
         const user = await User.findById(userId)
 
-        console.log('user log', user)
-
         if (!user) {
             return res.status(404).json({
                 success: false, message: 'User not found'
@@ -218,7 +216,7 @@ async function verifyCode(req: Request<{}, {}, VerifyCodeBody>, res: Response) {
         }
 
         if (user.verifyCode !== code || code.length !== 6) {
-            return res.status(401).json({
+            return res.status(400).json({
                 success: false, message: 'Invalid verification code'
             })
         }
@@ -382,7 +380,7 @@ async function signOut(req: Request, res: Response) {
         const user = await User.findById(id)
 
         if (!user) {
-            return res.status(401).json({ success: false, message: "Unauthorized request" })
+            return res.status(404).json({ success: false, message: "User not found" })
         }
 
         user.refreshToken = null
@@ -531,16 +529,19 @@ async function resetPassword(req: Request<{}, {}, resetPasswordBody>, res: Respo
     const platform = req.headers["x-platform"]
 
     if (!password || !confirmPassword) {
-        console.log('password:', password, 'conf:', confirmPassword, 'user', userId)
         return res.status(400).json({
             success: false, message: 'Both fields are required'
         })
     }
 
     if (password !== confirmPassword) {
-        return res.status(404).json({
+        return res.status(400).json({
             success: false, message: 'Passwords do not match'
         })
+    }
+
+    if (!userId) {
+        return res.status(400).json({ success: false, message: "User id is required" })
     }
 
     const user = await User.findById(userId)
@@ -552,7 +553,7 @@ async function resetPassword(req: Request<{}, {}, resetPasswordBody>, res: Respo
     }
 
     if (!user.isVerified) {
-        return res.status(404).json({
+        return res.status(403).json({
             success: false, message: 'Email is not verified'
         })
     }
@@ -588,7 +589,7 @@ async function healthCheck(req: Request, res: Response) {
         const user = await User.findById(userId)
 
         if (!user) {
-            return res.status(401)
+            return res.status(404)
                 .json({ success: false, message: 'Invalid user id' })
         }
 
@@ -610,7 +611,7 @@ async function healthCheck(req: Request, res: Response) {
         console.error("Api error", error)
         return res.status(500)
             .json({
-                success: true, message: "Api failed"
+                success: false, message: "Api failed"
             })
     }
 }
@@ -618,9 +619,9 @@ async function healthCheck(req: Request, res: Response) {
 async function updatePushToken(req: Request, res: Response) {
     const { pushToken } = req.body
     const userId = req.user?.id
-    console.log('pushToken', pushToken)
+
     if (!pushToken) {
-        return res.status(404).json({ success: false, message: 'Push token not found' })
+        return res.status(400).json({ success: false, message: 'Push token not found' })
     }
 
     if (!userId) {
@@ -665,7 +666,7 @@ async function deleteUser(req: Request, res: Response) {
         })
 
         if (chat.length > 0) {
-            return res.status(401).json({ success: false, message: 'Chat found with this user, Please delete chats.' })
+            return res.status(409).json({ success: false, message: 'Chat found with this user, Please delete chats.' })
         }
 
         if (user.avatar && user.avatarId) {

@@ -29,10 +29,12 @@ function processQueue(error: unknown) {
 
 api.interceptors.response.use(
     async (response) => {
-        if (response.status === 408) {
-            const originalRequest = response.config
+        const originalRequest = response.config
+        const code = response.data?.code
 
-            if (!originalRequest._retry) {
+        if (response.status === 401 && !originalRequest._retry) {
+
+            if (code === "TOKEN_EXPIRED" || code === "NO_TOKEN") {
                 if (isRefreshing) {
                     return new Promise((resolve, reject) => {
                         failedQueue.push({ resolve, reject })
@@ -61,6 +63,10 @@ api.interceptors.response.use(
                 } finally {
                     isRefreshing = false
                 }
+            }
+
+            if (code === "INVALID_TOKEN") {
+                authStore.getState().forceLogout()
             }
         }
 

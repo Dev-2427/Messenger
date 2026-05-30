@@ -12,8 +12,8 @@ export default async function authCheck(req: Request, res: Response, next: NextF
     const token = req.cookies.accessToken || req.headers.authorization?.split(" ")[1]
 
     if (!token) {
-        return res.status(408).json({
-            success: false, message: 'Session expired'
+        return res.status(401).json({
+            success: false, message: 'Session expired', code: "NO_TOKEN"
         })
     }
 
@@ -23,8 +23,8 @@ export default async function authCheck(req: Request, res: Response, next: NextF
         const user = await User.findById(decodedToken?.userId)
 
         if (!user) {
-            return res.status(408).json({
-                success: false, message: 'Invalid accessToken'
+            return res.status(401).json({
+                success: false, message: 'Invalid access token', code: 'INVALID_TOKEN'
             })
         }
 
@@ -36,8 +36,11 @@ export default async function authCheck(req: Request, res: Response, next: NextF
         next()
     } catch (error) {
         console.error("Token verification failed", error)
-        return res.status(408).json({
-            success: false, message: 'Session has been expired'
+        if (error instanceof jwt.TokenExpiredError) {
+            return res.status(401).json({ success: false, message: "Session expired", code: "TOKEN_EXPIRED" })
+        }
+        return res.status(401).json({
+            success: false, message: 'Session has been expired', code: 'INVALID_TOKEN'
         })
     }
 

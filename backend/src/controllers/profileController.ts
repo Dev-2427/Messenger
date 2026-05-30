@@ -14,22 +14,22 @@ async function updateAvatar(req: Request, res: Response) {
     const userId = req.user?.id
 
     if (!userId) {
-        return res.status(400).json({
+        return res.status(401).json({
             success: false, message: 'Unauthorized access'
         })
     }
 
     if (!req.file) {
         return res.status(400).json({
-            success: false, message: 'File not found'
+            success: false, message: 'File is required'
         })
     }
 
     const user = await User.findById(userId)
 
     if (!user) {
-        return res.status(400).json({
-            success: false, message: 'No user found'
+        return res.status(404).json({
+            success: false, message: 'User not found'
         })
     }
 
@@ -89,17 +89,19 @@ async function deleteAvatar(req: Request, res: Response) {
     }
 
     try {
+        const user = await User.findById(userId)
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' })
+        }
+
+
         try {
             await imagekit.deleteFile(id)
         } catch (error) {
             return res.status(500).json({ success: false, message: 'Error on avatar deletion' })
         }
 
-        const user = await User.findById(userId)
-
-        if (!user) {
-            return res.status(400).json({ success: false, message: 'User not found' })
-        }
 
         user.avatar = null
         user.avatarId = null
@@ -119,18 +121,18 @@ async function changeUsername(req: Request, res: Response) {
     const userId = req.user?.id
 
     if (!userId) {
-        return res.status(401).json({ succes: false, message: 'Unauthorized request' })
+        return res.status(401).json({ success: false, message: 'Unauthorized request' })
     }
 
     if (!name) {
-        return res.status(401).json({ succes: false, message: 'Name is required' })
+        return res.status(400).json({ success: false, message: 'Name is required' })
     }
 
     try {
         const user = await User.findById(userId)
 
         if (!user) {
-            return res.status(404).json({ succes: false, message: 'User not found' })
+            return res.status(404).json({ success: false, message: 'User not found' })
         }
 
         user.fullName = name
@@ -140,7 +142,7 @@ async function changeUsername(req: Request, res: Response) {
 
     } catch (error) {
         console.error('Something went wrong while updating username:', error)
-        return res.status(500).json({ succes: false, message: 'Failed to update username' })
+        return res.status(500).json({ success: false, message: 'Failed to update username' })
     }
 }
 
