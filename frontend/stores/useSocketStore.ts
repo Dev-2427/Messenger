@@ -66,6 +66,18 @@ const useSocketStore = create<SocketStore>((set, get) => ({
             console.log('online users', get().onlineUsers)
         })
 
+        socket.on("messageDeleted", (data) => {
+            const handleIncomingDelete = useChatAndMessageStore.getState().handleIncomingDelete
+
+            handleIncomingDelete(data.contextMenu)
+        })
+
+        socket.on("messageEdited", (data) => {
+            const handleIncomingEdit = useChatAndMessageStore.getState().handleIncomingEdit
+
+            handleIncomingEdit(data)
+        })
+
         set({ socket })
     },
 

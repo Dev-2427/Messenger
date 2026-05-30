@@ -44,6 +44,8 @@ export interface ChatAndMessagestore {
     deleteMessage: (contextMenu: contextMenuType) => Promise<void>,
     editMessage: (text: string, messageId: string) => Promise<void>
     handleIncomingMessage: (data: { message: Message, chatId: string, type: string, id: string }) => void,
+    handleIncomingDelete: (contextMenu: contextMenuType) => void,
+    handleIncomingEdit: (data: { messageId: string, text: string }) => void,
     putChatIdToDeleteArray: (id: string) => void,
     removeChatIdToDeleteArray: (id: string) => void,
     clearChatIdToDeleteArray: () => void,
@@ -433,6 +435,35 @@ const useChatAndMessageStore = create<ChatAndMessagestore>((set, get) => ({
             )
         }
 
+    },
+
+    handleIncomingDelete: (contextMenu) => {
+        set((state) => {
+            let updatedMessages = state.messages.map((m) => {
+                if (m._id !== contextMenu.messageId) {
+                    return m
+                }
+                if (contextMenu.type === "text") {
+                    return { ...m, text: null }
+                }
+
+                if (contextMenu.type === "media") {
+                    return { ...m, media: m.media.filter((file) => file.fileId !== contextMenu.mediaId) }
+                }
+
+                return m
+            })
+
+            updatedMessages = updatedMessages.filter((m) => m.text || m.media.length > 0)
+
+            return { messages: updatedMessages }
+        })
+    },
+
+    handleIncomingEdit: ({ messageId, text }) => {
+        set((state) => ({
+            messages: state.messages.map((m) => m._id === messageId ? { ...m, text } : m)
+        }))
     },
 
     putChatIdToDeleteArray: (id) => {
