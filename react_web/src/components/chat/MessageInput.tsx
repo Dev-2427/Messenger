@@ -1,4 +1,4 @@
-import { ImagePlus, Send, X } from "lucide-react"
+import { ImagePlus, Loader2, Send, X } from "lucide-react"
 
 import useChatAndMessageStore from "../../store/chatAndMessageStore"
 
@@ -148,10 +148,19 @@ export default function MessageInput() {
                         }`}
                 >
 
-                    <Send
-                        size={20}
-                        className="text-white dark:text-zinc-900"
-                    />
+                    {sendingMessage ? (
+                        <Loader2
+                            size={20}
+                            className="animate-spin text-white dark:text-zinc-900"
+                        />
+                    ) : (
+                        <Send
+                            size={20}
+                            className="text-white dark:text-zinc-900"
+                        />
+                    )
+                    }
+
 
                 </button>
 
