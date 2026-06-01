@@ -3,11 +3,16 @@ import useAuthStore from "../store/authStore";
 import FullScreenLoader from "../components/common/FullScreenLoader";
 
 export default function PublicRoute() {
-    const { isAuthenticated, isLoading } = useAuthStore();
+    const { isAuthenticated, isLoading, needsAvatarSetup } = useAuthStore();
 
     if (isLoading) {
         return <FullScreenLoader />
     }
 
-    return !isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+    if (!isAuthenticated) return <Outlet />
+
+    if (needsAvatarSetup) return <Navigate to="/welcome" replace />
+
+
+    return <Navigate to="/" replace />;
 }
