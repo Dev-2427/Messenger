@@ -8,39 +8,18 @@ import { useNavigate } from "react-router-dom"
 
 export default function Community() {
     const navigate = useNavigate()
-    const [search, setSearch] =
-        useState("")
+    const [search, setSearch] = useState("")
 
-    const users = getUsersStore(
-        (s) => s.users
-    )
+    const users = getUsersStore((s) => s.users)
+    const getUsers = getUsersStore((s) => s.getUsers)
+    const isGettingUser = getUsersStore((s) => s.isGettingUser)
 
-    const getUsers = getUsersStore(
-        (s) => s.getUsers
-    )
+    const onlineUsers = useSocketStore((s) => s.onlineUsers)
 
-    const isGettingUser = getUsersStore(
-        (s) => s.isGettingUser
-    )
+    const showActiveStatus = useUpdateProfile((s) => s.showActiveStatus)
 
-    const onlineUsers = useSocketStore(
-        (s) => s.onlineUsers
-    )
-
-    const showActiveStatus =
-        useUpdateProfile(
-            (s) => s.showActiveStatus
-        )
-
-    const setReceiverId =
-        useChatAndMessageStore(
-            (s) => s.setReceiverId
-        )
-
-    const setChatId =
-        useChatAndMessageStore(
-            (s) => s.setChatId
-        )
+    const setReceiverId = useChatAndMessageStore((s) => s.setReceiverId)
+    const setChatId = useChatAndMessageStore((s) => s.setChatId)
 
     useEffect(() => {
         getUsers()

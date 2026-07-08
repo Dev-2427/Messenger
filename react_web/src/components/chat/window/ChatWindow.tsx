@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-
 import useChatAndMessageStore from "../../../store/chatAndMessageStore"
 import MessageInput from "../MessageInput"
 import ChatHeader from "../ChatHeader"
@@ -11,25 +10,18 @@ export default function ChatWindow() {
 
     const chatId = useChatAndMessageStore((s) => s.chatId)
     const receiverId = useChatAndMessageStore((s) => s.receiverId)
-
     const chats = useChatAndMessageStore((s) => s.chats)
+    const getMessages = useChatAndMessageStore((s) => s.getMessages)
+    const gettingMessages = useChatAndMessageStore((s) => s.gettingMessages)
 
     const users = getUsersStore((s) => s.users)
 
-    const getMessages = useChatAndMessageStore((s) => s.getMessages)
-
-    const gettingMessages = useChatAndMessageStore(
-        (s) => s.gettingMessages
-    )
-    const [showProfile, setShowProfile] =
-        useState<boolean>(false)
+    const [showProfile, setShowProfile] = useState<boolean>(false)
 
     useEffect(() => {
-
         if (chatId || receiverId) {
             getMessages()
         }
-
     }, [chatId, receiverId])
 
     if (!chatId && !receiverId) {
@@ -72,7 +64,7 @@ export default function ChatWindow() {
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 px-4 py-5 space-y-4 overflow-hidden">
+                <div className="flex-1 px-4 py-5 space-y-4 overflow-hidden flex flex-col justify-end">
 
                     {/* Receiver */}
                     <div className="flex justify-start">
@@ -116,13 +108,8 @@ export default function ChatWindow() {
     }
 
 
-    const activeChat = chats.find(
-        (chat) => chat._id === chatId
-    )
-
-    const activeUser = users.find(
-        (user) => user._id === receiverId
-    )
+    const activeChat = chats.find((chat) => chat._id === chatId)
+    const activeUser = users.find((user) => user._id === receiverId)
 
     const profileData = activeChat
         ? {
@@ -149,7 +136,6 @@ export default function ChatWindow() {
                 <ChatHeader
                     id={profileData.id!}
                     name={profileData.name}
-                    email={profileData.email}
                     avatar={profileData.avatar || undefined}
                     lastSeen={profileData.lastSeen}
                     onOpenProfile={() => setShowProfile(true)}

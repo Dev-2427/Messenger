@@ -9,25 +9,15 @@ import FullScreenLoader from "../components/common/FullScreenLoader"
 
 export default function ProtectedRoute() {
 
-    const { isAuthenticated, isLoading } =
-        useAuthStore()
+    const { isAuthenticated, isLoading } = useAuthStore()
 
-    const connectSocket = useSocketStore(
-        (s) => s.connectSocket
-    )
+    const connectSocket = useSocketStore((s) => s.connectSocket)
+    const disconnectSocket = useSocketStore((s) => s.disconnectSocket)
 
-    const disconnectSocket = useSocketStore(
-        (s) => s.disconnectSocket
-    )
+    const hydrated = useThemeStore((s) => s.hydrated)
 
-    const hydrated = useThemeStore(
-        (s) => s.hydrated
-    )
+    const hasHydrated = useUpdateProfile((s) => s.hasHydrated)
 
-    const hasHydrated =
-        useUpdateProfile(
-            (s) => s.hasHydrated
-        )
 
     useEffect(() => {
 

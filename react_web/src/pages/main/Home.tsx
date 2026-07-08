@@ -5,15 +5,8 @@ import useChatAndMessageStore from "../../store/chatAndMessageStore"
 
 export default function Home() {
 
-  const chatId =
-    useChatAndMessageStore(
-      (s) => s.chatId
-    )
-
-  const receiverId =
-    useChatAndMessageStore(
-      (s) => s.receiverId
-    )
+  const chatId = useChatAndMessageStore((s) => s.chatId)
+  const receiverId = useChatAndMessageStore((s) => s.receiverId)
 
   const hasActiveChat = chatId || receiverId
 

@@ -11,7 +11,7 @@ interface IUser extends Document {
     verifyCode: string | null;
     verifyCodeExpiry: Date | null;
     googleId: string | null,
-    authProvider: String,
+    authProvider: "local" | "google" | "hybrid",
     lastSeen: Date | null;
     refreshToken: string | null;
     createdAt: Date;

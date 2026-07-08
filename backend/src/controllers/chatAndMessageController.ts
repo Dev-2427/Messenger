@@ -629,7 +629,7 @@ async function deleteMultipleChats(req: Request, res: Response) {
         return res.status(200).json({ success: true, message: 'Chats deleted successfully', deletedChats: chats.length, deletedMediaFiles: filesToDelete.length })
     } catch (error) {
         await session.abortTransaction()
-        console.log('Could not delete chats')
+        console.error('Could not delete chats', error)
         return res.status(500).json({ success: false, message: 'Chats deletion failed' })
     } finally {
         session.endSession()

@@ -10,6 +10,8 @@ export default function Settings() {
   const user = authStore((s) => s.user)
   const signOut = authStore((s) => s.signOut)
   const isLoggingout = authStore((s) => s.isLoggingout)
+  const deleteUser = authStore((s) => s.deleteUser)
+  const deletingUser = authStore((s) => s.deletingUser)
 
   const showActiveStatus = useUpdateProfile((s) => s.showActiveStatus)
   const changeAvatar = useUpdateProfile((s) => s.changeAvatar)
@@ -26,11 +28,7 @@ export default function Settings() {
   const mode = useThemeStore((s) => s.mode)
   const toggleMode = useThemeStore((s) => s.toggleMode)
 
-  const deleteUser = authStore((s) => s.deleteUser)
-  const deletingUser = authStore((s) => s.deletingUser)
-
   const navigate = useNavigate()
-
   const [username, setUsername] = useState(user.name || "")
 
   const [showDeleteModal, setShowDeleteModal] = useState(false)

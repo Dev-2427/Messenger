@@ -2,31 +2,20 @@ import { useNavigate } from "react-router-dom"
 import { FaUserLarge } from "react-icons/fa6"
 import { MdCloudUpload } from "react-icons/md"
 import { LoaderCircle } from "lucide-react"
-
-import useUpdateProfile from "../../store/updateProfileStore"
 import useAuthStore from "../../store/authStore"
+import useUpdateProfile from "../../store/updateProfileStore"
 
 export default function Welcome() {
 
   const navigate = useNavigate()
 
-  const localFile =
-    useUpdateProfile((s) => s.localFile)
+  const localFile = useUpdateProfile((s) => s.localFile)
+  const pickAvatar = useUpdateProfile((s) => s.pickAvatar)
+  const isUploading = useUpdateProfile((s) => s.isUploading)
+  const uploadAvatar = useUpdateProfile((s) => s.uploadAvatar)
 
-  const pickAvatar =
-    useUpdateProfile((s) => s.pickAvatar)
-
-  const isUploading =
-    useUpdateProfile((s) => s.isUploading)
-
-  const uploadAvatar =
-    useUpdateProfile((s) => s.uploadAvatar)
-
-  const avatar =
-    useAuthStore((s) => s.user.avatar)
-
-  const completeAvatarSetup =
-    useAuthStore((s) => s.completeAvatarSetup)
+  const avatar = useAuthStore((s) => s.user.avatar)
+  const completeAvatarSetup = useAuthStore((s) => s.completeAvatarSetup)
 
   return (
 

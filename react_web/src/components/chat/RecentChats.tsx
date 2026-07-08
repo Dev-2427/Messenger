@@ -60,16 +60,11 @@ export default function RecentChats() {
                     </div>
 
                     <h2 className="text-xl font-semibold text-zinc-700 dark:text-white mt-6">
-
                         No conversations yet
-
                     </h2>
 
                     <p className="text-zinc-500 dark:text-zinc-400 mt-2 max-w-xs">
-
-                        Start chatting with people
-                        from the community section.
-
+                        Start chatting with people from the community section.
                     </p>
 
                 </div>
@@ -85,11 +80,9 @@ export default function RecentChats() {
                 <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 transition-colors duration-200">
 
                     <p className="font-medium text-zinc-900 dark:text-white">
-
                         {chatIdsToDelete.length}
                         {" "}
                         selected
-
                     </p>
 
                     <div className="flex gap-3">

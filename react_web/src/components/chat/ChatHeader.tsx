@@ -8,8 +8,6 @@ interface HeaderProps {
     avatar?: string
     name: string
     id: string
-    email?: string
-    otherParticipantId?: string | null
     lastSeen?: Date | null,
     onOpenProfile: () => void
 }
@@ -18,32 +16,17 @@ export default function ChatHeader({
     avatar,
     name,
     id,
-    otherParticipantId,
     lastSeen,
     onOpenProfile
 }: HeaderProps) {
     const onlineUsers = useSocketStore((s) => s.onlineUsers)
 
-    const showActiveStatus = useUpdateProfile(
-        (s) => s.showActiveStatus
-    )
+    const showActiveStatus = useUpdateProfile((s) => s.showActiveStatus)
 
-    const setChatId =
-        useChatAndMessageStore(
-            (s) => s.setChatId
-        )
+    const setChatId = useChatAndMessageStore((s) => s.setChatId)
+    const setReceiverId = useChatAndMessageStore((s) => s.setReceiverId)
 
-    const setReceiverId =
-        useChatAndMessageStore(
-            (s) => s.setReceiverId
-        )
-
-    const isOnline =
-        onlineUsers.includes(id) ||
-        (
-            otherParticipantId &&
-            onlineUsers.includes(otherParticipantId)
-        )
+    const isOnline = onlineUsers.includes(id)
 
     return (
         <div className="h-20 border-b border-zinc-200 dark:border-zinc-800 shadow-sm shadow-zinc-100/50 dark:shadow-none bg-white dark:bg-zinc-900 px-4 lg:px-6 flex items-center justify-between transition-colors duration-200">
@@ -60,7 +43,6 @@ export default function ChatHeader({
                     <ArrowLeft size={22} />
                 </button>
 
-                {/* Left */}
                 <button
                     onClick={onOpenProfile}
                     className="flex items-center gap-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-2xl px-2 py-2 transition-all cursor-pointer"

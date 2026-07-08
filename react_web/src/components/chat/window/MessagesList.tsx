@@ -7,11 +7,8 @@ export default function MessagesList() {
 
   const messages = useChatAndMessageStore((s) => s.messages)
 
-  const gettingMessages = useChatAndMessageStore(
-    (s) => s.gettingMessages
-  )
-
   const user = useAuthStore((s) => s.user)
+
   const bottomRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -25,20 +22,6 @@ export default function MessagesList() {
     return () => clearTimeout(timeout)
   }, [messages])
 
-
-  if (gettingMessages) {
-    return (
-      <div className="flex-1 px-3 py-4 lg:px-6 lg:py-6 space-y-3 overflow-y-auto bg-zinc-50 dark:bg-zinc-950 transition-colors duration-200">
-        {[1, 2, 3, 4].map((item) => (
-          <div
-            key={item}
-            className="w-52 h-14 rounded-2xl bg-zinc-200 dark:bg-zinc-800 animate-pulse"
-          />
-        ))}
-
-      </div>
-    )
-  }
 
   if (messages.length === 0) {
     return (

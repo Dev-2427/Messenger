@@ -1,44 +1,19 @@
 import { ImagePlus, Loader2, Send, X } from "lucide-react"
-
 import useChatAndMessageStore from "../../store/chatAndMessageStore"
 
 export default function MessageInput() {
 
     const text = useChatAndMessageStore((s) => s.text)
-
     const files = useChatAndMessageStore((s) => s.files)
-
     const setMessage = useChatAndMessageStore((s) => s.setMessage)
-
     const removeFile = useChatAndMessageStore((s) => s.removeFile)
-
     const sendMessage = useChatAndMessageStore((s) => s.sendMessage)
-
-    const sendingMessage = useChatAndMessageStore(
-        (s) => s.sendingMessage
-    )
-
-    const deletingMessage = useChatAndMessageStore(
-        (s) => s.deletingMessage
-    )
-
-    const pickMedia = useChatAndMessageStore(
-        (s) => s.pickMedia
-    )
-    const editableMessageId =
-        useChatAndMessageStore(
-            (s) => s.editableMessageId
-        )
-
-    const editMessage =
-        useChatAndMessageStore(
-            (s) => s.editMessage
-        )
-
-    const setEditableMessageId =
-        useChatAndMessageStore(
-            (s) => s.setEditableMessageId
-        )
+    const sendingMessage = useChatAndMessageStore((s) => s.sendingMessage)
+    const deletingMessage = useChatAndMessageStore((s) => s.deletingMessage)
+    const pickMedia = useChatAndMessageStore((s) => s.pickMedia)
+    const editableMessageId = useChatAndMessageStore((s) => s.editableMessageId)
+    const editMessage = useChatAndMessageStore((s) => s.editMessage)
+    const setEditableMessageId = useChatAndMessageStore((s) => s.setEditableMessageId)
 
     const disabled =
         (!text.trim() && files.length === 0) ||
@@ -160,8 +135,6 @@ export default function MessageInput() {
                         />
                     )
                     }
-
-
                 </button>
 
             </div>

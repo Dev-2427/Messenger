@@ -30,7 +30,7 @@ async function signUp(req: Request<{}, {}, SignUpBody>, res: Response) {
         const existingUser = await User.findOne({ email })
         const newVerificationCode = Math.floor(100000 + Math.random() * 900000).toString()
         let userId;
-        console.log(newVerificationCode)
+
         if (existingUser) {
             if (existingUser?.isVerified) {
                 return res.status(409)
@@ -54,9 +54,10 @@ async function signUp(req: Request<{}, {}, SignUpBody>, res: Response) {
                 fullName,
                 email,
                 password: hashedPassword,
+                authProvider: "local",
                 isVerified: false,
                 verifyCode: newVerificationCode,
-                verifyCodeExpiry: newVerifyCodeExpiry
+                verifyCodeExpiry: newVerifyCodeExpiry,
             })
 
             await newUser.save()
@@ -67,7 +68,7 @@ async function signUp(req: Request<{}, {}, SignUpBody>, res: Response) {
 
         if (!sendEmail.success) {
             console.error("Email send failed but continuing signup:", sendEmail.message);
-            //return res.status(500).json({ success: false, message: sendEmail.message })
+            //return res.status(500).json({ success: false, message: sendEmail.message.message })
         }
 
         return res.status(201).json({ success: true, message: "A verification code has been sent to your email, please verify", userId })

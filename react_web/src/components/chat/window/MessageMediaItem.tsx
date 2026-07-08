@@ -21,6 +21,7 @@ export default function MessageMediaItem({
     openMenu,
     setPreviewMedia
 }: MessageMediaItemProps) {
+
     const mediaLongPress = useLongPress((event) => {
         let x = window.innerWidth / 2
         let y = window.innerHeight / 2
@@ -44,6 +45,7 @@ export default function MessageMediaItem({
     }, {
         threshold: 500, cancelOnMovement: true
     })
+
     return (
         <div
             {...mediaLongPress()}

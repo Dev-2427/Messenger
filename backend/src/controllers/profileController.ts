@@ -59,8 +59,6 @@ async function updateAvatar(req: Request, res: Response) {
             useUniqueFileName: false
         })
 
-        console.log('upload res', uploadResponse)
-
         user.avatar = uploadResponse.url
         user.avatarId = uploadResponse.fileId
         await user.save()
