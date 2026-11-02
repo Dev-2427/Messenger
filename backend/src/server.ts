@@ -8,7 +8,6 @@ import authRouter from './routes/authRoutes.js'
 import profileRouter from './routes/profileRoutes.js'
 import userDataRouter from './routes/userDataRoutes.js'
 import chatAndMessageRouter from './routes/chatAndMessageRoutes.js'
-// import './helpers/cleanTempMedia.js'
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import User from './schema/userSchema.js';
@@ -33,7 +32,6 @@ const io = new Server(httpServer, {
             'Authorization',
             'X-Requested-With',
             'X-Auth-Token',
-            // 'x-platform'
         ],
         exposedHeaders: [
             'X-Total-Count',
@@ -99,7 +97,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 io.use(async (socket, next) => {
     try {
-         let token =
+        let token =
             socket.handshake.auth?.token
 
         // Web fallback
@@ -230,7 +228,7 @@ async function shutdown() {
 
 process.on('SIGINT', shutdown)
 process.on('SIGTERM', shutdown)
-process.on('SIGQUIT', shutdown) // windows don't support completely
+process.on('SIGQUIT', shutdown)
 
 process.on('uncaughtException', (error) => {
     console.error('Uncaught Exception', error)

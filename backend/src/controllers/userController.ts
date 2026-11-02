@@ -97,8 +97,6 @@ async function googleAuth(req: Request, res: Response) {
 
         const payload = ticket.getPayload()
 
-        console.log('ticket', ticket)
-
         if (!payload) {
             return res.status(401).json({
                 success: false,

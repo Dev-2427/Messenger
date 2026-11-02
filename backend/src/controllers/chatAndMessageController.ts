@@ -1,11 +1,9 @@
 import type { Request, Response } from "express";
 import User from "../schema/userSchema.js";
-import Chat, { type ChatType } from "../schema/chatSchema.js";
+import Chat from "../schema/chatSchema.js";
 import imagekit from "../helpers/imagekit.js";
 import Message from "../schema/messageSchema.js";
 import type { deleteMessageBody } from "../types/types.js";
-// import crypto from 'crypto'
-// import cloudinary from "../helpers/coudinary.js";
 import mongoose from "mongoose";
 import sendPushNotification from "../helpers/pushNotification.js";
 import { pubClient } from "../helpers/redis/redis.js";
@@ -171,11 +169,6 @@ async function sendMessage(req: Request, res: Response) {
                 }
 
                 if (socketIds && socketIds.length) {
-                    // io.to(receiverSocketId).emit('receiveMessage', {
-                    //     message: responseMessage,
-                    //     chatId: chat!._id,
-                    //     type: chat!.type
-                    // })
                     for (const socketId of socketIds) {
                         io.to(socketId).emit('receiveMessage', {
                             message: responseMessage,
@@ -637,118 +630,6 @@ async function deleteMultipleChats(req: Request, res: Response) {
 
 }
 
-// async function imagekitAuth(req: Request, res: Response) {
-//     try {
-//         const authParams = imagekit.getAuthenticationParameters()
-
-//         return res.status(200).json({ success: true, message: 'Authenticated successfully', authParams })
-
-//         // const userId = req.user?.id.toString()
-
-//         // const timestamp = Math.floor(Date.now() / 1000)
-//         // const folder = 'media/test'
-//         // const tags = `user_${userId},avatar,temp`
-
-
-//         // const toSign = {
-//         //     timestamp, folder, tags
-//         // }
-
-//         // const signature = cloudinary.utils.api_sign_request(
-//         //     toSign,
-//         //     process.env.CLOUDINARY_API_SECRET!
-//         // )
-
-//         // return res.status(200).json({
-//         //     success: true, message: 'Signature created successfuly',
-//         //     authParams: {
-//         //         ...toSign,
-//         //         signature,
-//         //         apiKey: process.env.CLOUDINARY_API_KEY,
-//         //         cloudName: process.env.CLOUDINARY_NAME,
-//         //     }
-//         // })
-//     } catch (error) {
-//         console.error('Failed to authenticate imagekit:', error)
-//         res.status(500).json({ success: false, message: 'Failed to authenticate' })
-//     }
-// }
-
-
-
-// async function permanent(req: Request, res: Response) {
-//     // const { publicId, resourceType } = req.body
-//     const { fileId, filePath } = req.body
-//     const userId = req.user?.id
-
-//     try {
-//         await imagekit.updateFileDetails(fileId, {
-//             tags: [`user_${userId}`]
-//         })
-
-//         await imagekit.moveFile({
-//             sourceFilePath: filePath,
-//             destinationPath: '/media'
-//         })
-
-//         // await imagekit.getFileDetails()
-
-//         // const asset = await cloudinary.api.resource(publicId, {
-//         //     resource_type: resourceType
-//         // });
-
-//         // // 2️⃣ Security check – make sure user owns it
-//         // if (!asset.tags.includes(`user_${userId}`)) {
-//         //     return res.status(403).json({
-//         //         success: false,
-//         //         message: "You do not own this file"
-//         //     });
-//         // }
-
-
-//         // await cloudinary.uploader.add_tag('permanent', publicId)
-//         // await cloudinary.uploader.remove_tag('temp', publicId)
-
-//         // await cloudinary.uploader.explicit(publicId, {
-//         //     type: 'upload',
-//         //     asset_folder: 'media/permanent'
-//         // })
-
-
-//         // save in db
-//         // const media = await Media.create({
-//         //       user: userId,
-//         //   publicId,
-//         //   url: secureUrl,
-//         //   resourceType,
-//         //   width,
-//         //   height,
-//         //   size
-//         //   });
-
-//         return res.status(200).json({
-//             success: true, message: 'Expiry changed successfuly'
-//         })
-
-//     } catch (error) {
-//         console.error('save media failed:', error)
-
-//         // if (publicId) {
-//         if (fileId) {
-//             try {
-//                 // await cloudinary.uploader.destroy(publicId, { resource_type: resourceType })
-//                 await imagekit.deleteFile(fileId)
-//             } catch (e) {
-//                 console.error('Rollback failed:', e)
-//             }
-//         }
-//         return res.status(500).json({
-//             success: false, message: 'could not save media'
-//         })
-
-//     }
-// }
-
 async function markAsRead(req: Request, res: Response) {
     const { chatId } = req.body
     const userId = req.user?.id
@@ -787,7 +668,5 @@ async function markAsRead(req: Request, res: Response) {
 
 
 export {
-    sendMessage, getChats, getMessages, deleteMessage, editMessage,
-    // imagekitAuth, permanent,
-    deleteMultipleChats, markAsRead
+    sendMessage, getChats, getMessages, deleteMessage, editMessage, deleteMultipleChats, markAsRead
 }

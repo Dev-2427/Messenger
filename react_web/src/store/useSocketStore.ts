@@ -43,7 +43,6 @@ const useSocketStore = create<SocketStore>((set, get) => ({
         })
 
         socket.on('receiveMessage', (data) => {
-            console.log('Socket heard a message!', data)
 
             const handleIncomingMessage = useChatAndMessageStore.getState().handleIncomingMessage
 
@@ -51,9 +50,7 @@ const useSocketStore = create<SocketStore>((set, get) => ({
         })
 
         socket.on('getOnlineUsers', (users) => {
-            console.log('users', users)
             set({ onlineUsers: users })
-            console.log('Online users', get().onlineUsers)
         })
 
         socket.on("messageDeleted", (data) => {

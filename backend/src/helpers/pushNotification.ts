@@ -27,7 +27,7 @@ export default async function sendPushNotification(
         sound: 'default',
         title: title,
         body: body,
-        data: { ...data, url: `/messages/messageScreen/${data.chatId}`},
+        data: { ...data, url: `/messages/messageScreen/${data.chatId}` },
         channelId: 'messages',
         priority: 'high',
     }
@@ -38,7 +38,6 @@ export default async function sendPushNotification(
 
     try {
         const ticketChunk = await expo.sendPushNotificationsAsync([message])
-        console.log('Notification payload:', JSON.stringify(message, null, 2));
         return ticketChunk
     } catch (error) {
         console.error('Error sending notification:', error)

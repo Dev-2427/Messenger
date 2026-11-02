@@ -141,7 +141,6 @@ const authStore = create<AuthStore>((set) => ({
             const res = await api.post('/api/auth/sign_in', data)
 
             if (res.data.success) {
-                console.log(res.data)
                 set({ user: res.data.userData, isAuthenticated: true })
 
                 toast.success(res.data.message)
@@ -149,7 +148,6 @@ const authStore = create<AuthStore>((set) => ({
             } else {
                 toast.error(res.data.message)
             }
-            console.log(res.data)
         } catch (error: any) {
             console.error('Signin Failed:', error)
             toast.error(error.response?.data?.message || 'Signin failed')
@@ -193,7 +191,6 @@ const authStore = create<AuthStore>((set) => ({
                 toast.success(res.data.message)
                 navigate(`/verifyCode/${res.data.userId}/true`)
             } else {
-                console.log("errrrrrr", res.data)
                 toast.error(res.data.message)
             }
         } catch (error: any) {
