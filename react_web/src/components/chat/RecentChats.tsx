@@ -3,7 +3,9 @@ import useChatAndMessageStore from "../../store/chatAndMessageStore"
 import RecentChatsItem from "./RecentChatsItem"
 
 
-export default function RecentChats() {
+export default function RecentChats({ search }: { search: string }) {
+
+    const searchTerm = search.trim().toLowerCase()
 
     const isSelectingChats = useChatAndMessageStore((s) => s.isSelectingChats)
     const chats = useChatAndMessageStore((s) => s.chats)
@@ -110,9 +112,23 @@ export default function RecentChats() {
             )}
 
             <div className="flex-1 overflow-y-auto px-2 py-2">
-                {chats.map((chat) => (
-                    <RecentChatsItem key={chat._id} chat={chat} />
-                ))}
+                {chats
+                    .filter((chat) =>
+                        !searchTerm ||
+                        chat.chatName.toLowerCase().includes(searchTerm) ||
+                        (chat.lastMessage.text || "").toLowerCase().includes(searchTerm)
+                    )
+                    .map((chat) => (
+                        <RecentChatsItem key={chat._id} chat={chat} />
+                    ))}
+                {searchTerm && !chats.some((chat) =>
+                    chat.chatName.toLowerCase().includes(searchTerm) ||
+                    (chat.lastMessage.text || "").toLowerCase().includes(searchTerm)
+                ) && (
+                        <p className="px-4 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                            No chats found
+                        </p>
+                    )}
 
             </div>
         </>

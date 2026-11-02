@@ -1,9 +1,12 @@
+import { useState } from "react";
 import AllUsers from "../../components/chat/AllUsers";
 import ChatWindow from "../../components/chat/window/ChatWindow";
 import RecentChats from "../../components/chat/RecentChats";
 import useChatAndMessageStore from "../../store/chatAndMessageStore"
 
 export default function Home() {
+
+  const [search, setSearch] = useState("")
 
   const chatId = useChatAndMessageStore((s) => s.chatId)
   const receiverId = useChatAndMessageStore((s) => s.receiverId)
@@ -30,6 +33,8 @@ export default function Home() {
           <input
             type="text"
             placeholder="Search chats..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
             className="w-full px-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400 outline-none transition-all"
           />
         </div>
@@ -38,7 +43,7 @@ export default function Home() {
         <AllUsers />
 
         {/* Recent Chats */}
-        <RecentChats />
+        <RecentChats search={search} />
 
       </section>
 
