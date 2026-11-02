@@ -1,6 +1,5 @@
 import type z from "zod";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 import type { sendName } from "../schemas/schema";
 import toast from "react-hot-toast";
 import api from "../helpers/url";
@@ -17,14 +16,10 @@ interface UpdateProfileStore {
     isUploading: boolean,
     changingAvatar: boolean,
     isDeletingAvatar: boolean,
-    showActiveStatus: boolean,
-    hasHydrated: boolean,
     changingUsername: boolean,
     isUsernameEditable: boolean,
     setUsernameEditableTrue: () => void,
     setUsernameEditableFalse: () => void,
-    setHasHydrated: (status: boolean) => void,
-    toggleActiveStatus: () => Promise<void>,
     changeAvatar: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
     pickAvatar: (event: React.ChangeEvent<HTMLInputElement>) => void,
     uploadAvatar: () => Promise<void>;
@@ -32,12 +27,10 @@ interface UpdateProfileStore {
     changeUsername: (data: z.infer<typeof sendName>) => Promise<void>
 }
 
-const updateProfileStore = create(persist<UpdateProfileStore, [], [], Pick<UpdateProfileStore, "showActiveStatus">>((set, get) => ({
+const updateProfileStore = create<UpdateProfileStore>((set, get) => ({
     localFile: null,
     isUploading: false,
     isDeletingAvatar: false,
-    showActiveStatus: true,
-    hasHydrated: false,
     isUsernameEditable: false,
     changingUsername: false,
     changingAvatar: false,
@@ -173,35 +166,7 @@ const updateProfileStore = create(persist<UpdateProfileStore, [], [], Pick<Updat
             set({ changingUsername: false })
         }
     },
-
-    toggleActiveStatus: async () => {
-        set({ showActiveStatus: !get().showActiveStatus })
-    },
-
-    setHasHydrated: (status) => {
-        set({ hasHydrated: status })
-    }
-}),
-    {
-        name: "profile-storage",
-
-        storage: createJSONStorage(() => localStorage),
-
-        partialize: (state) => ({
-            showActiveStatus:
-                state.showActiveStatus,
-        }),
-        onRehydrateStorage: () => {
-            return (state, error) => {
-                if (error) {
-                    console.error('An error occured during showActiveStatus hydration:', error)
-                }
-
-                state?.setHasHydrated(true)
-            }
-        }
-    }
-)
+})
 )
 
 export default updateProfileStore

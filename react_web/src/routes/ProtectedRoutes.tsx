@@ -4,7 +4,6 @@ import { useEffect } from "react"
 import useAuthStore from "../store/authStore"
 import useSocketStore from "../store/useSocketStore"
 import useThemeStore from "../store/useThemeStore"
-import useUpdateProfile from "../store/updateProfileStore"
 import FullScreenLoader from "../components/common/FullScreenLoader"
 
 export default function ProtectedRoute() {
@@ -15,9 +14,6 @@ export default function ProtectedRoute() {
     const disconnectSocket = useSocketStore((s) => s.disconnectSocket)
 
     const hydrated = useThemeStore((s) => s.hydrated)
-
-    const hasHydrated = useUpdateProfile((s) => s.hasHydrated)
-
 
     useEffect(() => {
 
@@ -32,7 +28,7 @@ export default function ProtectedRoute() {
     }, [isAuthenticated])
 
 
-    const ready = !isLoading && hydrated && hasHydrated
+    const ready = !isLoading && hydrated
 
     if (!ready) {
         return <FullScreenLoader />

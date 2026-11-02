@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 
 import getUsersStore from "../../store/getUsersStore"
 import useSocketStore from "../../store/useSocketStore"
-import useUpdateProfile from "../../store/updateProfileStore"
 import useChatAndMessageStore from "../../store/chatAndMessageStore"
 import { useNavigate } from "react-router-dom"
 
@@ -15,8 +14,6 @@ export default function Community() {
     const isGettingUser = getUsersStore((s) => s.isGettingUser)
 
     const onlineUsers = useSocketStore((s) => s.onlineUsers)
-
-    const showActiveStatus = useUpdateProfile((s) => s.showActiveStatus)
 
     const setReceiverId = useChatAndMessageStore((s) => s.setReceiverId)
     const setChatId = useChatAndMessageStore((s) => s.setChatId)
@@ -104,10 +101,9 @@ export default function Community() {
                                         </div>
                                     )}
 
-                                    {showActiveStatus &&
-                                        onlineUsers.includes(user._id) && (
-                                            <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-green-500 border-2 border-white dark:border-zinc-900" />
-                                        )}
+                                    {onlineUsers.includes(user._id) && (
+                                        <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-green-500 border-2 border-white dark:border-zinc-900" />
+                                    )}
 
                                 </div>
 

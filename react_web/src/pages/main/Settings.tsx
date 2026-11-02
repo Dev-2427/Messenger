@@ -13,11 +13,9 @@ export default function Settings() {
   const deleteUser = authStore((s) => s.deleteUser)
   const deletingUser = authStore((s) => s.deletingUser)
 
-  const showActiveStatus = useUpdateProfile((s) => s.showActiveStatus)
   const changeAvatar = useUpdateProfile((s) => s.changeAvatar)
   const changingAvatar = useUpdateProfile((s) => s.changingAvatar)
   const isDeletingAvatar = useUpdateProfile((s) => s.isDeletingAvatar)
-  const toggleActiveStatus = useUpdateProfile((s) => s.toggleActiveStatus)
   const isUsernameEditable = useUpdateProfile((s) => s.isUsernameEditable)
   const setUsernameEditableTrue = useUpdateProfile((s) => s.setUsernameEditableTrue)
   const setUsernameEditableFalse = useUpdateProfile((s) => s.setUsernameEditableFalse)
@@ -138,38 +136,6 @@ export default function Settings() {
 
             </div>
 
-            {/* Active Status */}
-            <div className="flex items-center justify-between">
-
-              <div>
-
-                <p className="font-medium text-zinc-900 dark:text-white">
-                  Active Status
-                </p>
-
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-                  Show when you're online
-                </p>
-
-              </div>
-
-              <button
-                onClick={() =>
-                  toggleActiveStatus()
-                }
-                className={`w-16 h-9 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer ${showActiveStatus
-                  ? "bg-zinc-900 text-white dark:bg-zinc-200 dark:text-zinc-900"
-                  : "bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300"
-                  }`}
-              >
-
-                {showActiveStatus
-                  ? "On"
-                  : "Off"}
-
-              </button>
-
-            </div>
 
             {/* Email */}
             <div className="flex items-center justify-between">

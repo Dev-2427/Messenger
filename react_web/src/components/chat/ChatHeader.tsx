@@ -1,5 +1,4 @@
 import useSocketStore from "../../store/useSocketStore"
-import useUpdateProfile from "../../store/updateProfileStore"
 import { formatMessageTime } from "../../helpers/formatMessageTime"
 import { ArrowLeft } from "lucide-react"
 import useChatAndMessageStore from "../../store/chatAndMessageStore"
@@ -20,8 +19,6 @@ export default function ChatHeader({
     onOpenProfile
 }: HeaderProps) {
     const onlineUsers = useSocketStore((s) => s.onlineUsers)
-
-    const showActiveStatus = useUpdateProfile((s) => s.showActiveStatus)
 
     const setChatId = useChatAndMessageStore((s) => s.setChatId)
     const setReceiverId = useChatAndMessageStore((s) => s.setReceiverId)
@@ -70,19 +67,18 @@ export default function ChatHeader({
                             {name}
                         </h2>
 
-                        {showActiveStatus && (
-                            isOnline ? (
-                                <p className="text-sm text-green-500">
-                                    Online
+                        {isOnline ? (
+                            <p className="text-sm text-green-500">
+                                Online
+                            </p>
+                        ) : (
+                            lastSeen && (
+                                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                                    {formatMessageTime(lastSeen.toString())}
                                 </p>
-                            ) : (
-                                lastSeen && (
-                                    <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                        {formatMessageTime(lastSeen.toString())}
-                                    </p>
-                                )
                             )
-                        )}
+                        )
+                        }
 
                     </div>
 

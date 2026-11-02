@@ -71,42 +71,16 @@ export default function UserProfileOverlay({
 
                     </div>
 
-                    {/* Sections */}
-                    <div className="mt-10 lg:mt-14 space-y-8">
+                    {/* Email */}
+                    <div>
 
-                        {/* Email */}
-                        <div>
+                        <p className="text-zinc-400 dark:text-zinc-500 text-sm mb-2">
+                            Email
+                        </p>
 
-                            <p className="text-zinc-400 dark:text-zinc-500 text-sm mb-2">
-                                Email
-                            </p>
-
-                            <p className="text-lg lg:text-xl text-zinc-900 dark:text-white wrap-break-word">
-                                {profileData.email || "No email"}
-                            </p>
-
-                        </div>
-
-                        {/* Actions */}
-                        <div>
-
-                            <p className="text-zinc-400 dark:text-zinc-500 text-sm mb-4">
-                                Actions
-                            </p>
-
-                            <div className="space-y-3">
-
-                                <button className="w-full text-left p-4 rounded-2xl bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors duration-200 cursor-pointer">
-                                    Mute Notifications
-                                </button>
-
-                                <button className="w-full text-left p-4 rounded-2xl bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors duration-200 cursor-pointer">
-                                    Block User
-                                </button>
-
-                            </div>
-
-                        </div>
+                        <p className="text-lg lg:text-xl text-zinc-900 dark:text-white wrap-break-word">
+                            {profileData.email || "No email"}
+                        </p>
 
                     </div>
 

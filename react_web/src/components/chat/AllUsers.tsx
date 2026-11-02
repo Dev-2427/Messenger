@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import getUsersStore from "../../store/getUsersStore"
 import useChatAndMessageStore from "../../store/chatAndMessageStore"
 import useSocketStore from "../../store/useSocketStore"
-import useUpdateProfile from "../../store/updateProfileStore"
 
 export default function AllUsers() {
 
@@ -13,7 +12,6 @@ export default function AllUsers() {
     const setReceiverId = useChatAndMessageStore((s) => s.setReceiverId)
     const setChatId = useChatAndMessageStore((s) => s.setChatId)
     const onlineUsers = useSocketStore((s) => s.onlineUsers)
-    const showActiveStatus = useUpdateProfile((s) => s.showActiveStatus)
 
     useEffect(() => {
         getUsers()
@@ -66,11 +64,10 @@ export default function AllUsers() {
 
                             </div>
                         )}
-                        {showActiveStatus &&
-                            onlineUsers.includes(user._id) && (
-                                <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-green-500 border-2 border-white dark:border-zinc-900" />
-                            )
-                        }
+
+                        {onlineUsers.includes(user._id) && (
+                            <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-green-500 border-2 border-white dark:border-zinc-900" />
+                        )}
                     </div>
 
 
