@@ -2,6 +2,8 @@
 
 Messenger is a real-time messaging app with a React web client, an Expo mobile app, and a TypeScript backend. It supports direct conversations, media sharing, read receipts, online presence, and mobile push notifications.
 
+[Live App](https://messenger-taupe.vercel.app/) · [GitHub Repository](https://github.com/Dev-2427/Messenger)
+
 ## Features
 
 - **Authentication:** Sign up and sign in with credentials or Google, verify accounts by email, refresh sessions, and reset passwords.
@@ -160,10 +162,6 @@ npm start
 
 Use the Expo CLI to launch the app on an emulator or device. The project also includes `npm run android` and `npm run ios` scripts.
 
-## Known Limitation
-
-Email and password sign-in currently has a known issue in the deployed production web app. Credential sign-in works in local development; the production issue is unresolved.
-
 ## Production Builds
 
 Use `npm run dev` for local development. The commands below build and serve production output locally; `npm run preview` requires a successful `npm run build` first.
@@ -191,6 +189,7 @@ Create mobile production builds using the project’s Expo Application Services 
 - Deploy the backend, web app, and mobile app with their required environment variables configured in the relevant hosting services.
 - Set backend `URL` to the deployed web app origin so credentialed web requests and Socket.IO connections can connect.
 - Set web `VITE_URL` and mobile `EXPO_PUBLIC_API_URL` to the deployed backend URL.
+- Email/password sign-in currently has a production-only issue in the deployed web app. It works in local development; the production issue remains unresolved.
 - Add local and deployed web origins to the Google OAuth client configuration.
 - Configure MongoDB, Redis, ImageKit, and Resend credentials in the backend environment.
 - Use an HTTPS backend URL for deployed clients.
